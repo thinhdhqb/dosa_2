@@ -19,6 +19,7 @@ import com.example.dosa.ui.Activity.NewPasswordActivity;
 
 import com.example.dosa.databinding.FragmentAccountBinding;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class FragmentAccount extends Fragment {
     FirebaseAuth mAuth;
@@ -30,6 +31,7 @@ public class FragmentAccount extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAccountBinding.inflate(inflater, container, false);
+        mAuth = FirebaseAuth.getInstance();
 
         binding.imgEdit.setOnClickListener(view -> {
             sendData.sendData("account_detail", null);
@@ -60,7 +62,11 @@ public class FragmentAccount extends Fragment {
                 startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });
-
+        // Display user info
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        binding.txtUserDisplayName.setText(currentUser.getDisplayName());
+        binding.txtUserEmail.setText(currentUser.getEmail());
+        binding.txtUserPhone.setText(currentUser.getPhoneNumber());
         return binding.getRoot();
     }
 
