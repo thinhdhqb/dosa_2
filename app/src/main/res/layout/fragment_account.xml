@@ -382,6 +382,7 @@
                 android:background="#A1A1A1" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/btnLogout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -389,35 +390,35 @@
 
                 <ImageView
                     android:id="@+id/img6"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="28dp"
                     android:layout_height="28dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/img_25" />
+                    android:src="@drawable/img_25"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    app:layout_constraintLeft_toRightOf="@id/img6"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="15dp"
                     android:text="Đăng xuất"
                     android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/img6"
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <ImageView
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
                     android:layout_width="10dp"
                     android:layout_height="16dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="230dp"
-                    android:src="@drawable/img_26" />
+                    android:src="@drawable/img_26"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <View

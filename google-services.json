@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "510531578359",
+    "project_id": "dosa-968c6",
+    "storage_bucket": "dosa-968c6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:510531578359:android:e189289a43a9636fb866f2",
+        "android_client_info": {
+          "package_name": "com.example.Dosa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "510531578359-4iqm96ac0qr9na4gom9b444ebt48on2d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBqcb4-wbwN8UTXehL2yYo4bJgFgs_iCZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "510531578359-4iqm96ac0qr9na4gom9b444ebt48on2d.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

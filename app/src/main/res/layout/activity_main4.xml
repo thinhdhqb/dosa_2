@@ -44,7 +44,7 @@
         app:startIconDrawable="@drawable/baseline_fiber_pin_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtUsername"
+            android:id="@+id/edtEmailSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/custom_edt"
