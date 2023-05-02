@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="#E2E2E2"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+            android:text="@string/khotu"
+            android:textColor="#DE2671"
+            android:textSize="16sp" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/contraintLayout"
+        android:layout_width="match_parent"
+        android:padding="30dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="30dp"
+        android:background="@drawable/custom_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+        <TextView
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/txtLang"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:text="@string/EN"
+            android:background="@drawable/custtom_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/txtLang"
+            android:id="@+id/txtDecription1"
+            android:layout_marginLeft="30dp"
+            android:textSize="13sp"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="the quality of being full of hope and emphasizing the good parts of a situation, or a belief that something good will happen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:gravity="center"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDecription1"
+            android:id="@+id/txtLang1"
+            android:textColor="@color/white"
+            android:textSize="13sp"
+            android:text="@string/VN"
+            android:background="@drawable/custtom_btn"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtDecription1"
+            app:layout_constraintLeft_toRightOf="@id/txtLang1"
+            android:id="@+id/txtDecription2"
+            android:layout_marginLeft="10dp"
+            android:textSize="13sp"
+            android:padding="5dp"
+            android:textColor="@color/black"
+            android:text="Su lac quan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:textSize="24sp"
+        android:textAllCaps="false"
+        android:text="@string/continues"
+        android:textColor="@color/white"
+        android:background="@drawable/custtom_btn"
+        android:layout_margin="30dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contraintLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

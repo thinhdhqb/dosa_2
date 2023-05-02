@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="@string/home"
+        android:icon="@drawable/img_10"
+        android:id="@+id/menuHome"
+        app:showAsAction="withText" />
+
+    <item
+        android:title="@string/tudien"
+        android:icon="@drawable/img_11"
+        android:id="@+id/menuTuDien"
+        app:showAsAction="withText" />
+
+    <item
+        android:title="@string/khotu"
+        android:icon="@drawable/img_15"
+        android:id="@+id/menuKhoTu"
+        app:showAsAction="withText" />
+
+    <item
+        android:title="@string/account"
+        android:icon="@drawable/img_13"
+        android:id="@+id/menuTaiKhoan"
+        app:showAsAction="withText" />
+</menu>
