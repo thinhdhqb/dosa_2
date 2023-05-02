@@ -18,8 +18,10 @@ import com.example.dosa.ui.Activity.MainActivity;
 import com.example.dosa.ui.Activity.NewPasswordActivity;
 
 import com.example.dosa.databinding.FragmentAccountBinding;
-public class FragmentAccount extends Fragment {
+import com.google.firebase.auth.FirebaseAuth;
 
+public class FragmentAccount extends Fragment {
+    FirebaseAuth mAuth;
     SendData sendData;
     MainActivity mainActivity;
     FragmentAccountBinding binding;
@@ -54,10 +56,7 @@ public class FragmentAccount extends Fragment {
         binding.btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences preferences = getContext().getSharedPreferences(MainActivity.ACCOUNTPREFERENCES, Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.clear();
-                editor.commit();
+                mAuth.getInstance().signOut();
                 startActivity(new Intent(getContext(), LoginActivity.class));
             }
         });

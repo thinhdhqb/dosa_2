@@ -47,4 +47,8 @@
     <string name="Example">Example</string>
     <string name="Kho_tu">Kho từ</string>
     <string name="big">Lớn</string>
+    <string name="facebook_app_id">4329453160612368</string>
+    <string name="fb_login_protocol_scheme">fb1234</string>
+    <string name="facebook_client_token">6d0efe1fb889e12f38181adeae51e875</string>
+    <string name="default_web_client_id">1043243372297-cd3f11rhbn68qtltlhpq4bd4tpr1chet.apps.googleusercontent.com</string>
 </resources>

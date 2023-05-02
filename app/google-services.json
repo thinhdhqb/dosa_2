@@ -14,7 +14,15 @@
       },
       "oauth_client": [
         {
-          "client_id": "1043243372297-cd3f11rhbn68qtltlhpq4bd4tpr1chet.apps.googleusercontent.com",
+          "client_id": "1043243372297-lga0taoj9nkjjbmv4p18ig68t3jg8kc5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.dosa",
+            "certificate_hash": "81200d95810c0e364a87fe823082beda2570846f"
+          }
+        },
+        {
+          "client_id": "1043243372297-ietgl4uavbt8n92bri4uonhfo7cn3k4q.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
