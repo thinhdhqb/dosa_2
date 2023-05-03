@@ -8,11 +8,13 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 
 import com.example.dosa.local.dao.DefinitionDAO;
+import com.example.dosa.local.dao.EngVieTranslationDAO;
 import com.example.dosa.local.dao.ExampleDAO;
 import com.example.dosa.local.dao.IPADAO;
 import com.example.dosa.local.dao.WordDAO;
 import com.example.dosa.local.database.MainDatabase;
 import com.example.dosa.local.entity.Definition;
+import com.example.dosa.local.entity.EngVieTranslation;
 import com.example.dosa.local.entity.Example;
 import com.example.dosa.local.entity.IPA;
 import com.example.dosa.local.entity.Word;
@@ -25,6 +27,7 @@ public class Repository {
     private WordDAO wordDAO;
     private ExampleDAO exampleDAO;
     private IPADAO ipaDAO;
+    private EngVieTranslationDAO engVieTranslationDAO;
 
     public Repository(Application application) {
         MainDatabase db = MainDatabase.getDatabase(application);
@@ -32,6 +35,7 @@ public class Repository {
         wordDAO = db.wordDAO();
         exampleDAO = db.exampleDAO();
         ipaDAO = db.ipaDAO();
+        engVieTranslationDAO = db.engVieTranslationDAO();
     }
 
     public LiveData<Map<Definition, Example>> getDefinitionsAndExamplesByWord(String word) {
@@ -61,6 +65,10 @@ public class Repository {
 
     public LiveData<List<IPA>> getIPAByWord(String word) {
         return ipaDAO.getIPAByWord(word);
+    }
+
+    public LiveData<EngVieTranslation> getTranslationByWord(String word) {
+        return engVieTranslationDAO.getTranslationByWord(word);
     }
 
 

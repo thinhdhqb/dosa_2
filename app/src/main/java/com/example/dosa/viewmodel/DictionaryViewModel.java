@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.example.dosa.local.entity.Definition;
+import com.example.dosa.local.entity.EngVieTranslation;
 import com.example.dosa.local.entity.Example;
 import com.example.dosa.local.entity.IPA;
 import com.example.dosa.local.entity.Word;
@@ -48,5 +49,9 @@ public class DictionaryViewModel extends AndroidViewModel {
 
     public LiveData<List<IPA>> getIPAByWord(String word) {
         return repository.getIPAByWord(word);
+    }
+
+    public LiveData<EngVieTranslation> getTranslationByWord(String word) {
+        return repository.getTranslationByWord(word);
     }
 }

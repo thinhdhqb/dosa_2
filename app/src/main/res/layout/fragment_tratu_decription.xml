@@ -82,6 +82,7 @@
                     android:text="World" />
 
                 <ImageView
+                    android:id="@+id/imvGeneral"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
@@ -113,6 +114,7 @@
                     android:text="@string/UK" />
 
                 <ImageView
+                    android:id="@+id/imvUKAudio"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
@@ -144,6 +146,7 @@
                     android:text="US" />
 
                 <ImageView
+                    android:id="@+id/imvUSAudio"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
@@ -173,7 +176,8 @@
                 android:id="@+id/rcvDictionarySection"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                android:visibility="visible" />
 
             <LinearLayout
                 android:id="@+id/linear3"
@@ -189,13 +193,22 @@
                 android:orientation="horizontal" />
 
             <TextView
+                android:id="@+id/txtVie"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/custtom_btn"
                 android:padding="5dp"
                 android:text="@string/VN"
                 android:textColor="@color/white"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvTranslation"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:visibility="visible" />
 
 
         </LinearLayout>

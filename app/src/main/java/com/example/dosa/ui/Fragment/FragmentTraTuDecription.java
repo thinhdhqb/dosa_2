@@ -3,6 +3,7 @@ package com.example.dosa.ui.Fragment;
 import android.content.Context;
 import android.inputmethodservice.AbstractInputMethodService;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -20,16 +21,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.dosa.databinding.FragmentTratuDecriptionBinding;
 import com.example.dosa.local.entity.Definition;
+import com.example.dosa.local.entity.EngVieTranslation;
 import com.example.dosa.local.entity.Example;
 import com.example.dosa.local.entity.IPA;
 import com.example.dosa.local.entity.Word;
 import com.example.dosa.ui.Adapter.AdapterDictionarySection;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
+import com.example.dosa.ui.Adapter.AdapterTranslation;
 import com.example.dosa.viewmodel.DictionaryViewModel;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class FragmentTraTuDecription extends Fragment {
@@ -38,11 +47,18 @@ public class FragmentTraTuDecription extends Fragment {
     SendData sendData;
 
     AdapterDictionarySection adapterDictionarySection;
+    TextToSpeech tts;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTratuDecriptionBinding.inflate(inflater,container,false);
+
+        tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+            }
+        });
 
         dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
 
@@ -50,6 +66,8 @@ public class FragmentTraTuDecription extends Fragment {
 
         binding.rcvDictionarySection.setAdapter(adapterDictionarySection);
         binding.rcvDictionarySection.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        binding.rcvTranslation.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+
 
         AdapterSearchResult adapterSearchResult = new AdapterSearchResult(getContext(), new ArrayList<>(), sendData);
         binding.rcvSearchResult2.setAdapter(adapterSearchResult);
@@ -97,6 +115,28 @@ public class FragmentTraTuDecription extends Fragment {
             binding.txtWord.setText(word);
             fetchData(word);
             binding.schvWord2.setQuery(word, false);
+            binding.imvUKAudio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("imvUKAudio", "onClick: ");
+                    tts.setLanguage(Locale.UK);
+                    tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            });
+            binding.imvUSAudio.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tts.setLanguage(Locale.US);
+                    tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            });
+            binding.imvGeneral.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    tts.setLanguage(Locale.ENGLISH);
+                    tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+                }
+            });
         }
 
 
@@ -119,18 +159,37 @@ public class FragmentTraTuDecription extends Fragment {
                     if (ipa.tag.equals("UK")) {
                         binding.txtUKIPA.setText(ipa.ipa);
                         binding.layoutUKIPA.setVisibility(View.VISIBLE);
+
                     }
                     if (ipa.tag.equals("US")) {
                         binding.txtUSIPA.setText(ipa.ipa);
                         binding.layoutUSIPA.setVisibility(View.VISIBLE);
+
                     }
                     if (ipa.tag.equals("General")) {
                         binding.txtGeneralIPA.setText(ipa.ipa);
                         binding.layoutGeneralIPA.setVisibility(View.VISIBLE);
+
                     }
                 }
             }
         });
+        dictionaryViewModel.getTranslationByWord(word).observe(FragmentTraTuDecription.this.getActivity(), new Observer<EngVieTranslation>() {
+            @Override
+            public void onChanged(EngVieTranslation engVieTranslations) {
+                if (engVieTranslations != null) {
+                    ArrayList<String> list = new ArrayList<>();
+                    Document document = Jsoup.parse(engVieTranslations.html);
+                    Elements translationElement = document.select("li");
+                    for (Element element : translationElement) {
+                        list.add(element.text());
+                    }
+                    binding.rcvTranslation.setAdapter(new AdapterTranslation(list));
+                    binding.txtVie.setVisibility(View.VISIBLE);
+                };
+            }
+        });
+
     }
 
     private void fetchDefinitionsByWords(List<Word> words) {
