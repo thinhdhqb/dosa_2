@@ -2,6 +2,8 @@ package com.example.dosa.ui.Fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,43 +17,55 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.dosa.local.entity.Definition;
+import com.example.dosa.local.entity.EngVieTranslation;
+import com.example.dosa.local.entity.IPA;
+import com.example.dosa.local.entity.Word;
+import com.example.dosa.local.entity.WordDetail;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
 import com.example.dosa.ui.Adapter.AdapterTraTu;
+import com.example.dosa.ui.Adapter.AdapterTranslation;
 import com.example.dosa.viewmodel.DictionaryViewModel;
 import com.example.dosa.ui.Activity.TraTu;
 import com.example.dosa.databinding.FragmentTudienNewBinding;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 public class Fragment_TraTuNew  extends Fragment {
     FragmentTudienNewBinding fragmentTudienNewBinding;
+    DictionaryViewModel  dictionaryViewModel;
+    AdapterTraTu adapterTraTu;
     SendData sendData;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-       fragmentTudienNewBinding = FragmentTudienNewBinding.inflate(inflater,container,false);
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = currentUser.getUid();
+        dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
 
 
-        List<TraTu> list = new ArrayList<>();
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
-        list.add(new TraTu("1", "1", "1", "1", "1", "1"));
 
-        AdapterTraTu adapterTraTu = new AdapterTraTu(getContext(), list, new SendData() {
-            @Override
-            public void sendData(String a, Bundle data) {
-                sendData.sendData("tratu_decription", null);
-            }
-        });
+        fragmentTudienNewBinding = FragmentTudienNewBinding.inflate(inflater,container,false);
 
-        fragmentTudienNewBinding.recyclerTraTu.setAdapter(adapterTraTu);
         fragmentTudienNewBinding.recyclerTraTu.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        adapterTraTu = new AdapterTraTu(getContext(), new ArrayList<>(), sendData);
+        fragmentTudienNewBinding.recyclerTraTu.setAdapter(adapterTraTu);
+        fetchHistory(userID);
 
 
         DictionaryViewModel dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
@@ -98,6 +112,98 @@ public class Fragment_TraTuNew  extends Fragment {
         });
 
         return fragmentTudienNewBinding.getRoot();
+    }
+
+    private void fetchHistory(String userID) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("LookupHistory")
+                .whereEqualTo("userID", userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                WordDetail wordDetail = new WordDetail();
+                                wordDetail.setWord(document.get("word").toString());
+                                Log.d("HistoryLookup", "onComplete: " + document.get("word").toString());
+                                adapterTraTu.list.add(wordDetail);
+                                fetchData(wordDetail);
+                            }
+                        } else {
+                        }
+                    }
+                });
+    }
+
+    private void fetchData(WordDetail wordDetail) {
+
+        dictionaryViewModel.getWordsByWord(wordDetail.getWord()).observe(Fragment_TraTuNew.this.getActivity(), new Observer<List<Word>>() {
+            @Override
+            public void onChanged(List<Word> words) {
+                fetchDefinitionsByWords(words, wordDetail);
+            }
+        });
+
+        dictionaryViewModel.getIPAByWord(wordDetail.getWord()).observe(Fragment_TraTuNew.this.getActivity(), new Observer<List<IPA>>() {
+            @Override
+            public void onChanged(List<IPA> ipas) {
+                for (IPA ipa : ipas) {
+                    if (ipa.tag.equals("UK")) {
+                        wordDetail.setUkIPA(ipa.ipa);
+                    }
+                    if (ipa.tag.equals("US")) {
+                        wordDetail.setUsIPA(ipa.ipa);
+                    }
+                    if (ipa.tag.equals("General")) {
+                        wordDetail.setGeneralIPA(ipa.ipa);
+                    }
+                }
+            }
+        });
+        dictionaryViewModel.getTranslationByWord(wordDetail.getWord()).observe(Fragment_TraTuNew.this.getActivity(), new Observer<EngVieTranslation>() {
+            @Override
+            public void onChanged(EngVieTranslation engVieTranslations) {
+                if (engVieTranslations != null) {
+                    ArrayList<String> list = new ArrayList<>();
+                    Document document = Jsoup.parse(engVieTranslations.html);
+                    Elements translationElement = document.select("li");
+                    for (Element element : translationElement) {
+                        list.add(element.text());
+                    }
+                    wordDetail.setTranslations(list);
+                };
+            }
+        });
+    }
+
+    private void fetchDefinitionsByWords(List<Word> words, WordDetail wordDetail) {
+        for (Word word : words) {
+            WordDetail.Section section = new WordDetail.Section(word.pos, new ArrayList<>());
+            wordDetail.getSections().add(section);
+            dictionaryViewModel.getDefinitionsByWordID(word.id).observe(Fragment_TraTuNew.this.getActivity(), new Observer<List<Definition>>() {
+                @Override
+                public void onChanged(List<Definition> definitionList) {
+                    Log.d("fetchDefinitionsByWords", "onChanged: ");
+
+                    for (Definition definition : definitionList) {
+                        WordDetail.DefinitionDetail definitionDetail = new WordDetail.DefinitionDetail(definition.definition, new ArrayList<>());
+                        section.getDefinitionDetails().add(definitionDetail);
+                        dictionaryViewModel.getExampleByDefinitionID(definition.id).observe(Fragment_TraTuNew.this.getActivity(), new Observer<List<String>>() {
+                            @Override
+                            public void onChanged(List<String> strings) {
+                                definitionDetail.getExamples().addAll(strings);
+                                adapterTraTu.notifyDataSetChanged();
+                            }
+                        });
+                        adapterTraTu.notifyDataSetChanged();
+                    }
+
+                }
+            });
+            adapterTraTu.notifyDataSetChanged();
+        }
+        adapterTraTu.notifyDataSetChanged();
     }
 
     @Override

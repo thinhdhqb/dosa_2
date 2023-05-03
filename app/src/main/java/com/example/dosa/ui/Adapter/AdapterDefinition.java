@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dosa.R;
+import com.example.dosa.local.entity.WordDetail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class AdapterDefinition extends RecyclerView.Adapter<AdapterDefinition.MyViewHolder> {
-    public ArrayList<Pair<String, ArrayList<String>>> list;
+    public ArrayList<WordDetail.DefinitionDetail> list;
 
-    public AdapterDefinition(ArrayList<Pair<String, ArrayList<String>>> list) {
+    public AdapterDefinition(ArrayList<WordDetail.DefinitionDetail>list) {
         this.list = list;
     }
 
@@ -33,8 +34,8 @@ public class AdapterDefinition extends RecyclerView.Adapter<AdapterDefinition.My
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.txtDefinition.setText(list.get(position).first);
-        holder.rcvExample.setAdapter(new AdapterExample(list.get(position).second));
+        holder.txtDefinition.setText(list.get(position).getDefinition());
+        holder.rcvExample.setAdapter(new AdapterExample(list.get(position).getExamples()));
     }
 
     @Override

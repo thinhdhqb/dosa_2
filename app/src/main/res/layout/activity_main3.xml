@@ -143,7 +143,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutUSIPA"
+        android:id="@+id/layoutUSIPAHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="25dp"
@@ -194,7 +194,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutUSIPA">
+        app:layout_constraintTop_toBottomOf="@id/layoutUSIPAHistory">
 
         <TextView
             android:gravity="right"

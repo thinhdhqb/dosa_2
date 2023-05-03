@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@id/txtWord" />
 
         <LinearLayout
-            android:id="@+id/layoutUKIPA"
+            android:id="@+id/layoutUKIPAHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -92,13 +92,13 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/layoutUSIPA"
+            android:id="@+id/layoutUSIPAHistory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:orientation="horizontal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/layoutUKIPA">
+            app:layout_constraintTop_toBottomOf="@id/layoutUKIPAHistory">
 
             <TextView
                 android:layout_width="wrap_content"

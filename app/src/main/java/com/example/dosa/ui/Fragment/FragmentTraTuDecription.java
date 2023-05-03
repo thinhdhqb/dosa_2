@@ -25,6 +25,7 @@ import com.example.dosa.local.entity.EngVieTranslation;
 import com.example.dosa.local.entity.Example;
 import com.example.dosa.local.entity.IPA;
 import com.example.dosa.local.entity.Word;
+import com.example.dosa.local.entity.WordDetail;
 import com.example.dosa.ui.Adapter.AdapterDictionarySection;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
 import com.example.dosa.ui.Adapter.AdapterTranslation;
@@ -189,25 +190,24 @@ public class FragmentTraTuDecription extends Fragment {
                 };
             }
         });
-
     }
 
     private void fetchDefinitionsByWords(List<Word> words) {
         for (Word word : words) {
-            Pair<String, ArrayList<Pair<String, ArrayList<String>>>> positionSection = new Pair<>(word.pos, new ArrayList<>());
-            adapterDictionarySection.list.add(positionSection);
+            WordDetail.Section section = new WordDetail.Section(word.pos, new ArrayList<>());
+            adapterDictionarySection.list.add(section);
             dictionaryViewModel.getDefinitionsByWordID(word.id).observe(FragmentTraTuDecription.this.getActivity(), new Observer<List<Definition>>() {
                 @Override
                 public void onChanged(List<Definition> definitionList) {
                     Log.d("fetchDefinitionsByWords", "onChanged: ");
 
                     for (Definition definition : definitionList) {
-                        Pair<String, ArrayList<String>> definitionExample = new Pair<>(definition.definition, new ArrayList<>());
-                        positionSection.second.add(definitionExample);
+                        WordDetail.DefinitionDetail definitionDetail = new WordDetail.DefinitionDetail(definition.definition, new ArrayList<>());
+                        section.getDefinitionDetails().add(definitionDetail);
                         dictionaryViewModel.getExampleByDefinitionID(definition.id).observe(FragmentTraTuDecription.this.getActivity(), new Observer<List<String>>() {
                             @Override
                             public void onChanged(List<String> strings) {
-                                definitionExample.second.addAll(strings);
+                                definitionDetail.getExamples().addAll(strings);
                                 adapterDictionarySection.notifyDataSetChanged();
                             }
                         });
