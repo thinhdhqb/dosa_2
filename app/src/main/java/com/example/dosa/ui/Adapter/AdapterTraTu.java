@@ -82,7 +82,7 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
             txtWord = itemView.findViewById(R.id.txtWordHistory);
             txtUSIPA = itemView.findViewById(R.id.txtUSIPAHistory);
             txtUKIPA = itemView.findViewById(R.id.txtUKIPAHistory);
-            txtGeneralIPA = itemView.findViewById(R.id.txtGeneralIPA);
+            txtGeneralIPA = itemView.findViewById(R.id.txtGeneralIPAHistory);
             txtVie = itemView.findViewById(R.id.txtVieHistory);
             rcvDictionarySection = itemView.findViewById(R.id.rcvDictionarySectionHistory);
             rcvTranslation = itemView.findViewById(R.id.rcvTranslationHistory);

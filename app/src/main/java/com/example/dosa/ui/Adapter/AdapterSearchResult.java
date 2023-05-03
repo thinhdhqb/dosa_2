@@ -16,6 +16,7 @@ import com.example.dosa.local.entity.Word;
 import com.example.dosa.ui.Fragment.SendData;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
@@ -83,13 +84,14 @@ public class AdapterSearchResult extends RecyclerView.Adapter<AdapterSearchResul
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         String userID = currentUser.getUid();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> user = new HashMap<>();
-        user.put("userID", userID);
-        user.put("word", word);
+        Map<String, Object> lookup = new HashMap<>();
+        lookup.put("userID", userID);
+        lookup.put("word", word);
+        lookup.put("timestamp", Timestamp.now());
 
         // Add a new document with a generated ID
         db.collection("LookupHistory")
-                .add(user)
+                .add(lookup)
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
