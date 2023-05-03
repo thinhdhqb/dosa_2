@@ -3,7 +3,6 @@ package com.example.dosa.ui.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +16,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.dosa.local.entity.Definition;
-import com.example.dosa.local.entity.EngVieTranslation;
-import com.example.dosa.local.entity.IPA;
-import com.example.dosa.local.entity.Word;
-import com.example.dosa.local.entity.WordDetail;
+import com.example.dosa.data.entity.Definition;
+import com.example.dosa.data.entity.EngVieTranslation;
+import com.example.dosa.data.entity.IPA;
+import com.example.dosa.data.entity.Word;
+import com.example.dosa.data.entity.WordDetail;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
 import com.example.dosa.ui.Adapter.AdapterTraTu;
-import com.example.dosa.ui.Adapter.AdapterTranslation;
 import com.example.dosa.viewmodel.DictionaryViewModel;
-import com.example.dosa.ui.Activity.TraTu;
 import com.example.dosa.databinding.FragmentTudienNewBinding;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -45,7 +42,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
 public class Fragment_TraTuNew  extends Fragment {
     FragmentTudienNewBinding fragmentTudienNewBinding;

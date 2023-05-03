@@ -38,6 +38,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -177,10 +178,20 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("FirebaseAuth", "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            UserProfileChangeRequest profileChangeRequest = new UserProfileChangeRequest.Builder()
+                                .setDisplayName(name)
+                                .build();
+                            user.updateProfile(profileChangeRequest)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        updateUI(user);
+
+                                    }
+                                });
                         } else {
                             // If sign in fails, display a message to the user.
-                            txtMessage.setText("Đăng nhập không thành công");
+                            txtMessage.setText("Email đã tồn tại");
                             txtMessage.setVisibility(View.VISIBLE);
                         }
                     }

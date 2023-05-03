@@ -2,25 +2,42 @@ package com.example.dosa.repository;
 
 
 import android.app.Application;
-import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 
-import com.example.dosa.local.dao.DefinitionDAO;
-import com.example.dosa.local.dao.EngVieTranslationDAO;
-import com.example.dosa.local.dao.ExampleDAO;
-import com.example.dosa.local.dao.IPADAO;
-import com.example.dosa.local.dao.WordDAO;
-import com.example.dosa.local.database.MainDatabase;
-import com.example.dosa.local.entity.Definition;
-import com.example.dosa.local.entity.EngVieTranslation;
-import com.example.dosa.local.entity.Example;
-import com.example.dosa.local.entity.IPA;
-import com.example.dosa.local.entity.Word;
+import com.example.dosa.R;
+import com.example.dosa.data.dao.DefinitionDAO;
+import com.example.dosa.data.dao.EngVieTranslationDAO;
+import com.example.dosa.data.dao.ExampleDAO;
+import com.example.dosa.data.dao.IPADAO;
+import com.example.dosa.data.dao.WordDAO;
+import com.example.dosa.data.database.MainDatabase;
+import com.example.dosa.data.entity.Definition;
+import com.example.dosa.data.entity.EngVieTranslation;
+import com.example.dosa.data.entity.Example;
+import com.example.dosa.data.entity.IPA;
+import com.example.dosa.data.entity.NewsArticle;
+import com.example.dosa.data.entity.Word;
+import com.google.zxing.common.StringUtils;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jsoup.internal.StringUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class Repository {
     private DefinitionDAO definitionDAO;
@@ -28,6 +45,8 @@ public class Repository {
     private ExampleDAO exampleDAO;
     private IPADAO ipaDAO;
     private EngVieTranslationDAO engVieTranslationDAO;
+    private String API_KEY;
+
 
     public Repository(Application application) {
         MainDatabase db = MainDatabase.getDatabase(application);
@@ -36,6 +55,8 @@ public class Repository {
         exampleDAO = db.exampleDAO();
         ipaDAO = db.ipaDAO();
         engVieTranslationDAO = db.engVieTranslationDAO();
+        API_KEY = application.getString(R.string.newsapi_apikey);
+
     }
 
     public LiveData<Map<Definition, Example>> getDefinitionsAndExamplesByWord(String word) {
@@ -71,23 +92,4 @@ public class Repository {
         return engVieTranslationDAO.getTranslationByWord(word);
     }
 
-
-
-
-
-//    private static class MyAsyncTask extends AsyncTask
-//            <Void, Void, Void> {
-//        private WordDAO mAsyncTaskDao;
-//        MyAsyncTask(WordDAO dao) {
-//            mAsyncTaskDao = dao;
-//        }
-//        @Override
-//        protected Void doInBackground(final Void... voids) {
-//            Word[] words = mAsyncTaskDao.getFirst10WordsAsArray();
-//            for (Word word : words) {
-//                Log.d("MyAsyncTask", "doInBackground: " + word.word);
-//            }
-//            return null;
-//        }
-//    }
 }

@@ -1,11 +1,9 @@
 package com.example.dosa.ui.Fragment;
 
 import android.content.Context;
-import android.inputmethodservice.AbstractInputMethodService;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,12 +18,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.dosa.databinding.FragmentTratuDecriptionBinding;
-import com.example.dosa.local.entity.Definition;
-import com.example.dosa.local.entity.EngVieTranslation;
-import com.example.dosa.local.entity.Example;
-import com.example.dosa.local.entity.IPA;
-import com.example.dosa.local.entity.Word;
-import com.example.dosa.local.entity.WordDetail;
+import com.example.dosa.data.entity.Definition;
+import com.example.dosa.data.entity.EngVieTranslation;
+import com.example.dosa.data.entity.IPA;
+import com.example.dosa.data.entity.Word;
+import com.example.dosa.data.entity.WordDetail;
 import com.example.dosa.ui.Adapter.AdapterDictionarySection;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
 import com.example.dosa.ui.Adapter.AdapterTranslation;
@@ -37,10 +34,8 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class FragmentTraTuDecription extends Fragment {
     FragmentTratuDecriptionBinding binding;
@@ -58,6 +53,7 @@ public class FragmentTraTuDecription extends Fragment {
         tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
+
             }
         });
 

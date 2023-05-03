@@ -1,6 +1,5 @@
 package com.example.dosa.ui.Adapter;
 
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dosa.R;
-import com.example.dosa.local.entity.WordDetail;
+import com.example.dosa.data.entity.WordDetail;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class AdapterDefinition extends RecyclerView.Adapter<AdapterDefinition.MyViewHolder> {
     public ArrayList<WordDetail.DefinitionDetail> list;

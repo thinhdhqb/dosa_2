@@ -5,11 +5,11 @@ import android.app.Application;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
-import com.example.dosa.local.entity.Definition;
-import com.example.dosa.local.entity.EngVieTranslation;
-import com.example.dosa.local.entity.Example;
-import com.example.dosa.local.entity.IPA;
-import com.example.dosa.local.entity.Word;
+import com.example.dosa.data.entity.Definition;
+import com.example.dosa.data.entity.EngVieTranslation;
+import com.example.dosa.data.entity.Example;
+import com.example.dosa.data.entity.IPA;
+import com.example.dosa.data.entity.Word;
 import com.example.dosa.repository.Repository;
 
 import java.util.List;

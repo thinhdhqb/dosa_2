@@ -29,8 +29,8 @@
 
             <ImageView
                 android:id="@+id/imgTranlate"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_marginRight="10dp"
                 android:src="@drawable/img_31"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -39,8 +39,8 @@
 
             <ImageView
                 android:id="@+id/imgYeuThich"
-                android:layout_width="20dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_marginRight="30dp"
                 android:src="@drawable/img_32"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -49,10 +49,11 @@
 
             <ImageView
                 android:id="@+id/imgListen"
-                android:layout_width="20dp"
-                android:layout_height="30dp"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
                 android:layout_marginRight="30dp"
                 android:src="@drawable/img_33"
+                android:visibility="invisible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/imgYeuThich"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -73,6 +74,7 @@
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/txtTopicReading"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
@@ -83,62 +85,43 @@
                 android:textSize="13sp" />
 
             <TextView
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
+                android:id="@+id/txtTitleReading"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="10dp"
                 android:text="The world’s happiest countries for 2023"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_marginLeft="10dp"
-                android:text="CNN  |  20-3-2023"
+                android:id="@+id/txtSourceReading"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="CNN  |  20-3-2023" />
 
             <ImageView
-                android:src="@drawable/img_34"
+                android:id="@+id/imvArticleImage"
                 android:layout_width="match_parent"
-                android:layout_height="190dp"/>
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:layout_centerInParent="true"
+                android:src="@drawable/img_34" />
 
             <TextView
-                android:lineSpacingMultiplier="1.5"
-                android:text="There’s cause for optimism in the latest report on world happiness.
-For one, benevolence is about 25% higher than it was pre-pandemic.
-“Benevolence to others, especially the helping of strangers, which went up dramatically in 2021, stayed high in 2022,” John Helliwell, one of the authors of the World Happiness Report, said in an interview with CNN.
-And global happiness has not taken a hit in the three years of the Covid-19 pandemic. Life evaluations from 2020 to 2022 have been “remarkably resilient,” the report says, with global averages basically in line with the three years preceding the pandemic.
-“Even during these difficult years, positive emotions have remained twice as prevalent as negative ones, and feelings of positive social support twice as strong as those of loneliness,” Helliwell said in a news release.
-The report, which is a publication of the UN Sustainable Development Solutions Network, draws on global survey data from people in more than 150 countries. Countries are ranked on happiness based on their average life evaluations over the three preceding years, in this case 2020 to 2022.
-The report, which was released on Monday, identifies the happiest nations, those at the very bottom of the happiness scale and everything in between, plus the factors that tend to lead to greater happiness. March 20 is the International Day of Happiness, a day designated by the United Nations that’s marking its 10th anniversary in 2023."
-                android:textColor="@color/black"
-                android:textSize="13sp"
+                android:id="@+id/txtContentReading"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-
-            <ImageView
-                android:src="@drawable/img_35"
-                android:layout_width="match_parent"
-                android:layout_height="190dp"/>
-
-            <TextView
                 android:lineSpacingMultiplier="1.5"
-                android:text="For the sixth year in a row, Finland is the world’s happiest country, according to World Happiness Report rankings based largely on life evaluations from the Gallup World Poll.
-The Nordic country and its neighbors Denmark, Iceland, Sweden and Norway all score very well on the measures the report uses to explain its findings: healthy life expectancy, GDP per capita, social support, low corruption, generosity in a community where people look after each other and freedom to make key life decisions.
-But since we can’t all move to Finland, is there something other societies can learn from these rankings?
-“Is it, are they doing things that we wish we’d seen before and we can start doing? Or is it something unique about their climate and history that make them different? And fortunately, at least from my perspective, the answer is the former,” said Helliwell, who is a professor emeritus at the Vancouver School of Economics, University of British Columbia.
-Taking a holistic view of the well-being of all the components of a society and its members makes for better life evaluations and happier countries.
-“The objective of every institution should be to contribute what it can to human well-being,” the report says, which includes accounting for future generations and preserving basic human rights.
-Israel moves up to No. 4 this year from its No. 9 ranking last year. The Netherlands (No. 5), Switzerland (No. 8), Luxembourg (No. 9) and New Zealand (No. 10) round out the top 10.
-Australia (No. 12), Canada (No. 13), Ireland (No. 14), the United States (No. 15) and the United Kingdom (No. 19) all made it into the top 20."
                 android:textColor="@color/black"
-                android:textSize="13sp"
-                android:layout_margin="10dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:textSize="18sp" />
+
 
         </LinearLayout>
 

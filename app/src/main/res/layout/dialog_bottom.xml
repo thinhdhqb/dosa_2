@@ -1,79 +1,72 @@
-<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/contraintLayout"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="20dp"
     android:background="@drawable/custom_background"
+    android:padding="10dp"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    app:layout_constraintLeft_toLeftOf="parent">
 
     <TextView
-        android:layout_marginRight="10dp"
         android:id="@+id/txtLanguage"
-        android:textColor="@color/white"
-        android:padding="6dp"
-        android:background="@drawable/custom_txt"
-        android:textSize="16sp"
-        android:text="@string/VN"
-        app:layout_constraintRight_toLeftOf="@id/imgHeart"
-        app:layout_constraintTop_toTopOf="parent"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/custom_txt"
+        android:paddingVertical="2dp"
+        android:paddingHorizontal="6dp"
+        android:text="@string/VN"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintRight_toLeftOf="@id/imgHeart"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/imgHeart"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
         android:src="@drawable/img_32"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/txtWord"
+        android:id="@+id/txtWordDialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
         android:text="@string/Optimism"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/txtNoun"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:text="@string/noun"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtWord" />
-
     <LinearLayout
-        android:id="@+id/layoutUKIPAHistory"
+        android:id="@+id/layoutGeneralIPADialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginTop="10dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtNoun">
+        app:layout_constraintTop_toBottomOf="@+id/txtWordDialog">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:text="@string/UK" />
+            android:text="World" />
 
         <ImageView
+            android:id="@+id/imvGenealIPADialog"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="6dp"
             android:src="@drawable/img_30" />
 
         <TextView
+            android:id="@+id/txtGeneralIPADialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -83,13 +76,46 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/layoutUSIPAHistory"
+        android:id="@+id/layoutUKIPADialog"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:orientation="horizontal"
+        android:visibility="gone"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutUKIPAHistory">
+        app:layout_constraintTop_toBottomOf="@+id/layoutGeneralIPADialog">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:text="@string/UK" />
+
+        <ImageView
+            android:id="@+id/imvUKIPADialog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="25dp"
+            android:src="@drawable/img_30" />
+
+        <TextView
+            android:id="@+id/txtUKIPADialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:text="/ˈɒp.tɪ.mɪ.zəm/" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutUSIPADialog"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutUKIPADialog">
 
         <TextView
             android:layout_width="wrap_content"
@@ -98,13 +124,15 @@
             android:text="US" />
 
         <ImageView
+            android:id="@+id/imvUSIPADialog"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="25dp"
             android:src="@drawable/img_30" />
 
         <TextView
+            android:id="@+id/txtUSIPADialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -113,37 +141,12 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:id="@+id/linear4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/layoutUSIPAHistory">
-
-        <TextView
-            android:id="@+id/txtLang"
-            android:layout_marginLeft="10dp"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            android:padding="5dp"
-            android:text="@string/VN"
-            android:background="@drawable/custtom_btn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/txtDecription1"
-            android:layout_marginLeft="10dp"
-            android:textSize="13sp"
-            android:padding="5dp"
-            android:textColor="@color/black"
-            android:text="the quality of being full of hope and emphasizing the good parts of a situation, or a belief that something good will happen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvSectionDialog"
+        android:layout_width="match_parent"
+        android:layout_height="360dp"
+        app:layout_constraintTop_toBottomOf="@+id/layoutUSIPADialog"
+        tools:layout_editor_absoluteX="10dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

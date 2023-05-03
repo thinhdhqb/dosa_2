@@ -13,12 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dosa.R;
-import com.example.dosa.local.entity.WordDetail;
+import com.example.dosa.data.entity.WordDetail;
 import com.example.dosa.ui.Fragment.SendData;
-import com.example.dosa.ui.Activity.TraTu;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder>{
     Context context;

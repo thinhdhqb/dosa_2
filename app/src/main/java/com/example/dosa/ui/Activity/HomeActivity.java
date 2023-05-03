@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.dosa.R;
+import com.example.dosa.databinding.FragmentAccountBinding;
 import com.example.dosa.ui.Fragment.SendData;
 import com.example.dosa.ui.Fragment.FragmentAccount;
 import com.example.dosa.ui.Fragment.FragmentHome;
@@ -27,6 +28,10 @@ import com.example.dosa.databinding.ActivityMain6Binding;
 public class HomeActivity extends AppCompatActivity implements SendData {
     FragmentManager fragmentManager;
     ActivityMain6Binding binding;
+    Fragment_Account_Detail fragment_account_detail;
+    Fragment_TraTuNew fragment_traTuNew;
+    FragmentAccount fragmentAccount;
+    FragmentHome fragmentHome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -2,6 +2,10 @@ package com.example.dosa.ui.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +16,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dosa.R;
-import com.example.dosa.ui.Activity.News;
+import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.ui.Activity.ReadingActivity;
+import com.example.dosa.utils.Utils;
 
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 
 public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
     Context context;
-    List<News> list;
+    List<NewsArticle> list;
 
-    public AdapterNews(Context context, List<News> list) {
+    public AdapterNews(Context context, List<NewsArticle> list) {
         this.context = context;
         this.list = list;
     }
@@ -37,14 +44,40 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
 
     @Override
     public void onBindViewHolder(@NonNull viewHolider holder, int position) {
-        News news = list.get(position);
+        NewsArticle newsArticle = list.get(position);
 
-        holder.txtType.setText(news.getType());
-        holder.txtDecription.setText(news.getNameNews());
-        holder.imgHinhAnh.setImageResource(news.getImage());
+        if (newsArticle.getKeywords() == null) {
+            holder.txtType.setText("Other");
+        }
+        else holder.txtType.setText(newsArticle.getKeywords().get(0));
+        holder.txtDecription.setText(newsArticle.getTitle());
+        holder.imgHinhAnh.setImageBitmap(newsArticle.getImage());
 
         holder.itemView.setOnClickListener(view -> {
-            context.startActivity(new Intent(context, ReadingActivity.class));
+            Intent intent = new Intent(context, ReadingActivity.class);
+            intent.putExtra("title", newsArticle.getTitle());
+            intent.putExtra("content", newsArticle.getContent());
+            intent.putExtra("source", newsArticle.getSource());
+            intent.putExtra("keyword", newsArticle.getKeywords().get(0));
+            intent.putExtra("date", newsArticle.getDate());
+            // save image
+            try {
+                //Write file
+                Bitmap bmp = newsArticle.getImage();
+                String filename = "bitmap.png";
+                FileOutputStream stream = context.openFileOutput(filename, Context.MODE_PRIVATE);
+                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                //Cleanup
+                stream.close();
+//                bmp.recycle();
+
+                //Pop intent
+                intent.putExtra("image", filename);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         });
 
     }
@@ -65,5 +98,6 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
             txtDecription = itemView.findViewById(R.id.txtTitleItem);
         }
     }
+
 
 }
