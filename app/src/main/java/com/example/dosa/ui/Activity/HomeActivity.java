@@ -2,6 +2,7 @@ package com.example.dosa.ui.Activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -24,30 +25,50 @@ import com.example.dosa.ui.Fragment.Fragmentkhotu;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.dosa.databinding.ActivityMain6Binding;
 
+import java.util.ArrayList;
+
 
 public class HomeActivity extends AppCompatActivity implements SendData {
     FragmentManager fragmentManager;
     ActivityMain6Binding binding;
     Fragment_Account_Detail fragment_account_detail;
     Fragment_TraTuNew fragment_traTuNew;
+    Fragment_TuDien fragment_tuDien;
     FragmentAccount fragmentAccount;
     FragmentHome fragmentHome;
-
+    Fragmentkhotu fragmentkhotu;
+    FragmentkhoTuDecription fragmentkhoTuDecription;
+    FragmentKhoTuDecriptionContinues fragmentKhoTuDecriptionContinues;
+    Fragment[] fragments;
+    FragmentSetting fragmentSetting;
+    FragmentTraTuDecription fragmentTraTuDecription;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMain6Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.frameLayout, new FragmentHome(), null);
-        //fragmentTransaction.replace(R.id.container, new FragmentA(), null);
-        fragmentTransaction.commit();
-
         binding.bottomNavigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        fragmentManager = getSupportFragmentManager();
+
+        fragmentHome = new FragmentHome();
+        fragment_traTuNew = new Fragment_TraTuNew();
+        fragmentkhotu = new Fragmentkhotu();
+        fragmentAccount = new FragmentAccount();
+        fragment_account_detail = new Fragment_Account_Detail();
+        fragmentSetting = new FragmentSetting();
+        fragment_tuDien = new Fragment_TuDien();
+        fragmentkhoTuDecription = new FragmentkhoTuDecription();
+        fragmentKhoTuDecriptionContinues = new FragmentKhoTuDecriptionContinues();
+        fragments = new Fragment[]{fragmentHome, fragment_traTuNew, fragmentkhotu, fragmentAccount, fragment_account_detail,
+                fragmentSetting, fragment_tuDien, fragmentkhoTuDecription, fragmentKhoTuDecriptionContinues};
 
 
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        for (Fragment fragment : fragments) {
+            fragmentTransaction.add(R.id.frameLayout, fragment, null).hide(fragment);
+        }
+        fragmentTransaction.show(fragmentHome).commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -58,25 +79,16 @@ public class HomeActivity extends AppCompatActivity implements SendData {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             switch (item.getItemId()) {
                 case R.id.menuHome:
-
-                    fragmentTransaction.replace(R.id.frameLayout, new FragmentHome(), null);
-                    //fragmentTransaction.replace(R.id.container, new FragmentA(), null);
-                    fragmentTransaction.commit();
+                    showFragment(fragmentHome);
                     return true;
                 case R.id.menuTuDien:
-                    fragmentTransaction.replace(R.id.frameLayout, new Fragment_TraTuNew(), null);
-                    //fragmentTransaction.replace(R.id.container, new FragmentA(), null);
-                    fragmentTransaction.commit();
+                    showFragment(fragment_traTuNew);
                     return true;
                 case R.id.menuKhoTu:
-                    fragmentTransaction.replace(R.id.frameLayout, new Fragmentkhotu(), null);
-                    //fragmentTransaction.replace(R.id.container, new FragmentA(), null);
-                    fragmentTransaction.commit();
+                    showFragment(fragmentkhotu);
                     return true;
                 case R.id.menuTaiKhoan:
-                    fragmentTransaction.replace(R.id.frameLayout, new FragmentAccount(), null);
-                    //fragmentTransaction.replace(R.id.container, new FragmentA(), null);
-                    fragmentTransaction.commit();
+                    showFragment(fragmentAccount);
                     return true;
             }
             return false;
@@ -126,43 +138,40 @@ public class HomeActivity extends AppCompatActivity implements SendData {
 
     @Override
     public void sendData(String a, Bundle data) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (a.equals("account_detail")) {
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new Fragment_Account_Detail(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragment_account_detail, null);
             fragmentTransaction.commit();
         }else if(a.equals("account")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new FragmentAccount(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragmentAccount, null);
             fragmentTransaction.commit();
         }else if (a.equals("setting")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new FragmentSetting(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragmentSetting, null);
             fragmentTransaction.commit();
         }else if(a.equals("news")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new Fragment_TuDien(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragment_tuDien, null);
             fragmentTransaction.commit();
         }else if (a.equals("tratu_decription")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FragmentTraTuDecription fragment = new FragmentTraTuDecription();
             fragment.setArguments(data);
             fragmentTransaction.replace(R.id.frameLayout,fragment, null);
             fragmentTransaction.commit();
         }else if(a.equals("khotu_decription")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new FragmentkhoTuDecription(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragmentkhoTuDecription, null);
             fragmentTransaction.commit();
         }else if (a.equals("khotu_continues")){
-            FragmentManager fragmentManager = getSupportFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.frameLayout, new FragmentKhoTuDecriptionContinues(), null);
+            fragmentTransaction.replace(R.id.frameLayout, fragmentKhoTuDecriptionContinues, null);
             fragmentTransaction.commit();
         }
+    }
+
+    private void showFragment(Fragment targetFragment) {
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        for (Fragment fragment : fragments) {
+            if (!fragment.isHidden())
+                fragmentTransaction.hide(fragment);
+        }
+        fragmentTransaction.show(targetFragment).commit();
     }
 }
