@@ -127,9 +127,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
-        android:elevation="8dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
@@ -181,7 +179,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#A1A1A1" />
+                android:background="#E8EBEF" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -225,7 +223,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#A1A1A1" />
+                android:background="#E8EBEF" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -267,10 +265,6 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#A1A1A1" />
 
         </LinearLayout>
 
@@ -283,9 +277,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="30dp"
         android:layout_marginRight="10dp"
-        android:elevation="8dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/cardview1">
 
@@ -337,7 +329,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#A1A1A1" />
+                android:background="#E8EBEF" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -383,7 +375,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#A1A1A1" />
+                android:background="#E8EBEF" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/btnLogout"
@@ -424,11 +416,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#A1A1A1" />
 
         </LinearLayout>
 

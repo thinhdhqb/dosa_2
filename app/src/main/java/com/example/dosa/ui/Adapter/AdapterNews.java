@@ -1,5 +1,6 @@
 package com.example.dosa.ui.Adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -74,7 +75,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
 
                 //Pop intent
                 intent.putExtra("image", filename);
-                context.startActivity(intent);
+                ((Activity) context).startActivityForResult(intent, 123);
             } catch (Exception e) {
                 e.printStackTrace();
             }

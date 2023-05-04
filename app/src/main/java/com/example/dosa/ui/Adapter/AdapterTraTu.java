@@ -51,7 +51,7 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
             holder.layoutUSIPA.setVisibility(View.VISIBLE);
         }
         if (wordDetail.getGeneralIPA() != null) {
-            holder.txtGeneralIPA.setText(wordDetail.getUsIPA());
+            holder.txtGeneralIPA.setText(wordDetail.getGeneralIPA());
             holder.layoutGeneralIPA.setVisibility(View.VISIBLE);
         }
         holder.rcvDictionarySection.setAdapter(new AdapterDictionarySectionHistory(wordDetail.getSections()));

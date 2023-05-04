@@ -1,6 +1,5 @@
 package com.example.dosa.ui.Activity;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -10,31 +9,25 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.UtteranceProgressListener;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
-import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.EngVieTranslation;
 import com.example.dosa.data.entity.IPA;
-import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.data.entity.Word;
 import com.example.dosa.data.entity.WordDetail;
 import com.example.dosa.databinding.ActivityMain9Binding;
@@ -42,7 +35,6 @@ import com.example.dosa.databinding.ActivityMain9Binding;
 import com.example.dosa.R;
 import com.example.dosa.ui.Adapter.AdapterDictionarySectionHistory;
 import com.example.dosa.ui.Adapter.AdapterTranslation;
-import com.example.dosa.ui.Fragment.FragmentTraTuDecription;
 import com.example.dosa.utils.Utils;
 import com.example.dosa.viewmodel.DictionaryViewModel;
 
@@ -66,8 +58,12 @@ public class ReadingActivity extends AppCompatActivity {
     TextView txtWord, txtUSIPA, txtUKIPA, txtLanguage, txtGeneralIPA;
     LinearLayout layoutUSIPA, layoutUKIPA, layoutGeneralIPA;
     RecyclerView rcvSection;
-    TextToSpeech tts;
+    TextToSpeech tts, ttsWord;
     Boolean speaking = false;
+    ImageView imvGeneral, imvUS, imvUK;
+    public ArrayList<String> lookupWords;
+    private String SETTING_PREF = "settingPref";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +71,8 @@ public class ReadingActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
+        lookupWords = new ArrayList<>();
+
 
 
 
@@ -114,6 +112,8 @@ public class ReadingActivity extends AppCompatActivity {
             @Override
             public void onInit(int i) {
                 binding.imgListen.setVisibility(View.VISIBLE);
+                tts.setLanguage(Locale.UK);
+
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
                     public void onStart(String s) {
@@ -145,11 +145,10 @@ public class ReadingActivity extends AppCompatActivity {
             }
         });
 
-
+        //
         binding.imgListen.setOnClickListener(view -> {
             if (!speaking) {
-                tts.setLanguage(Locale.ENGLISH);
-                tts.speak(content, TextToSpeech.QUEUE_FLUSH, null, TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID);
+                tts.speak(content, TextToSpeech.QUEUE_FLUSH, null);
                 binding.imgListen.setImageDrawable(getDrawable(R.drawable.baseline_pause_24));
                 speaking = true;
             }
@@ -160,14 +159,50 @@ public class ReadingActivity extends AppCompatActivity {
             }
         });
 
-        binding.imgTranlate.setOnClickListener(view -> {
-            Dialog dialog = new Dialog(ReadingActivity.this);
-            dialog.setContentView(R.layout.dialog_setting);
-            dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            dialog.show();
-            dialog.getWindow().setGravity(Gravity.BOTTOM);
+        // dialog setting
+        Dialog settingDialog = new Dialog(ReadingActivity.this);
+        settingDialog.setContentView(R.layout.dialog_setting);
+        settingDialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        TextView txtSizeSmall = settingDialog.findViewById(R.id.txtSizeSmall);
+        TextView txtSizeMedium = settingDialog.findViewById(R.id.txtSizeMedium);
+        TextView txtSizeLarge = settingDialog.findViewById(R.id.txtSizeLarge);
+        TextView txtUS = settingDialog.findViewById(R.id.txtVoiceUS);
+        TextView txtUK = settingDialog.findViewById(R.id.txtVoiceUK);
+        SharedPreferences preferences = getSharedPreferences(SETTING_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (preferences.contains("size")) {
+            String size = preferences.getString("size", "medium");
+            setTextSize(size, txtSizeSmall, txtSizeMedium, txtSizeLarge);
+        }
+        if (preferences.contains("voice")) {
+            String voice = preferences.getString("voice", "us");
+            setVoice(voice, txtUK, txtUS);
+        }
+        txtSizeSmall.setOnClickListener(v -> {
+            setTextSize("small", txtSizeSmall, txtSizeMedium, txtSizeLarge);
         });
+        txtSizeMedium.setOnClickListener(v -> {
+            setTextSize("medium", txtSizeSmall, txtSizeMedium, txtSizeLarge);
+        });
+        txtSizeLarge.setOnClickListener(v -> {
+            setTextSize("large", txtSizeSmall, txtSizeMedium, txtSizeLarge);
+        });
+        txtUS.setOnClickListener(v -> {
+            setVoice("us", txtUK, txtUS);
+        });
+        txtUK.setOnClickListener(v -> {
+            setVoice("uk", txtUK, txtUS);
+        });
+
+
+        binding.imgSetting.setOnClickListener(view -> {
+            settingDialog.show();
+            settingDialog.getWindow().setGravity(Gravity.BOTTOM);
+        });
+
+        //
+
+        // dialog look up
 
         dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_bottom);
@@ -180,6 +215,20 @@ public class ReadingActivity extends AppCompatActivity {
         layoutGeneralIPA = dialog.findViewById(R.id.layoutGeneralIPADialog);
         layoutUKIPA = dialog.findViewById(R.id.layoutUKIPADialog);
         layoutUSIPA = dialog.findViewById(R.id.layoutUSIPADialog);
+        imvGeneral = dialog.findViewById(R.id.imvGeneralIPADialog);
+        imvUK = dialog.findViewById(R.id.imvUKIPADialog);
+        imvUS = dialog.findViewById(R.id.imvUSIPADialog);
+
+        ttsWord = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                imvUK.setVisibility(View.VISIBLE);
+                imvGeneral.setVisibility(View.VISIBLE);
+                imvUS.setVisibility(View.VISIBLE);
+            }
+        });
+
+
         dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialogInterface) {
@@ -206,6 +255,12 @@ public class ReadingActivity extends AppCompatActivity {
         });
 
         dialog.getWindow().setGravity(Gravity.BOTTOM);
+        //
+
+
+        binding.txtBackReading.setOnClickListener(view -> {
+            back();
+        });
     }
 
     public void updateDialog(String word) {
@@ -215,6 +270,18 @@ public class ReadingActivity extends AppCompatActivity {
         layoutGeneralIPA.setVisibility(View.GONE);
         ((TextView)dialog.findViewById(R.id.txtWordDialog)).setText(word);
         rcvSection.setAdapter(adapterEN);
+        imvUK.setOnClickListener(view -> {
+            ttsWord.setLanguage(Locale.UK);
+            ttsWord.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+        });
+        imvUS.setOnClickListener(view -> {
+            ttsWord.setLanguage(Locale.US);
+            ttsWord.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+        });
+        imvGeneral.setOnClickListener(view -> {
+            ttsWord.setLanguage(Locale.ENGLISH);
+            ttsWord.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+        });
         fetchData(word);
         dialog.show();
     }
@@ -282,5 +349,82 @@ public class ReadingActivity extends AppCompatActivity {
             adapterEN.notifyDataSetChanged();
         }
         adapterEN.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        back();
+        super.onBackPressed();
+    }
+
+    private void back() {
+        // send back look up words
+        Intent intent = new Intent();
+        intent.putExtra("lookupWords", lookupWords.toArray(new String[0]));
+        setResult(RESULT_OK, intent);
+        finish();
+    }
+
+    private void setTextSize(String size, TextView txtSmall, TextView txtMedium, TextView txtLarge) {
+        // set setting text size
+        SharedPreferences preferences = getSharedPreferences(SETTING_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (size.equals("small")) {
+            txtSmall.setTextColor(getColor(R.color.primary));
+            txtSmall.setTypeface(null, Typeface.BOLD);
+            txtMedium.setTextColor(Color.parseColor("#5C5C5C") );
+            txtMedium.setTypeface(null, Typeface.NORMAL);
+            txtLarge.setTextColor(Color.parseColor("#5C5C5C"));
+            txtLarge.setTypeface(null, Typeface.NORMAL);
+            binding.txtContentReading.setTextSize(14);
+            editor.putString("size", "small");
+        }
+        if (size.equals("medium")) {
+            txtSmall.setTextColor(Color.parseColor("#5C5C5C"));
+            txtSmall.setTypeface(null, Typeface.NORMAL);
+            txtMedium.setTextColor(getColor(R.color.primary));
+            txtMedium.setTypeface(null, Typeface.BOLD);
+            txtLarge.setTextColor(Color.parseColor("#5C5C5C"));
+            txtLarge.setTypeface(null, Typeface.NORMAL);
+            binding.txtContentReading.setTextSize(18);
+            editor.putString("size", "medium");
+
+        }
+        if (size.equals("large")) {
+            txtSmall.setTextColor(Color.parseColor("#5C5C5C"));
+            txtSmall.setTypeface(null, Typeface.NORMAL);
+            txtMedium.setTextColor(Color.parseColor("#5C5C5C"));
+            txtMedium.setTypeface(null, Typeface.NORMAL);
+            txtLarge.setTextColor(getColor(R.color.primary));
+            txtLarge.setTypeface(null, Typeface.BOLD);
+            binding.txtContentReading.setTextSize(22);
+            editor.putString("size", "large");
+        }
+        editor.commit();
+    }
+
+    private void setVoice(String voice, TextView txtUK, TextView txtUS) {
+        //seting voice
+        SharedPreferences preferences = getSharedPreferences(SETTING_PREF, MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        if (voice.equals("us")) {
+            txtUS.setTextColor(getColor(R.color.primary));
+            txtUS.setTypeface(null, Typeface.BOLD);
+            txtUK.setTextColor(Color.parseColor("#5C5C5C"));
+            txtUK.setTypeface(null, Typeface.NORMAL);
+            tts.setLanguage(Locale.US);
+            editor.putString("voice", "us");
+
+        }
+        if (voice.equals("uk")) {
+            txtUK.setTextColor(getColor(R.color.primary));
+            txtUK.setTypeface(null, Typeface.BOLD);
+            txtUS.setTextColor(Color.parseColor("#5C5C5C"));
+            txtUS.setTypeface(null, Typeface.NORMAL);
+            tts.setLanguage(Locale.UK);
+            editor.putString("voice", "uk");
+
+        }
+        editor.commit();
     }
 }

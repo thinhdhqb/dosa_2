@@ -37,6 +37,8 @@ import org.json.JSONArray;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class FragmentHome extends Fragment {
@@ -55,10 +57,10 @@ public class FragmentHome extends Fragment {
         binding.txtGreeting.setText("Xin chào, " + FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "!");
 
         articles = new ArrayList<>();
-        adapterNews = new AdapterNews(getContext(), articles);
-        binding.recyclerView.setAdapter(adapterNews);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        binding.recyclerView.setHasFixedSize(true);
+        adapterNews = new AdapterNews(getActivity(), articles);
+        binding.rcvRecommendedArticles.setAdapter(adapterNews);
+        binding.rcvRecommendedArticles.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rcvRecommendedArticles.setHasFixedSize(true);
 
         fetchArticles();
 

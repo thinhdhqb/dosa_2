@@ -11,18 +11,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.dosa.R;
+import com.example.dosa.ui.Activity.HomeActivity;
 import com.example.dosa.ui.Fragment.SendData;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.example.dosa.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class AdapterSearchResult extends RecyclerView.Adapter<AdapterSearchResult.MyViewHolder> {
     public ArrayList<String> list;
@@ -59,7 +52,8 @@ public class AdapterSearchResult extends RecyclerView.Adapter<AdapterSearchResul
                 Bundle bundle = new Bundle();
                 String word = list.get(holder.getAdapterPosition());
                 bundle.putString("word", word);
-                saveLookupHistory(word);
+                Utils.saveLookupHistory(word, context);
+                ((HomeActivity) context).fragmentDictionary.updateUI();
                 sendData.sendData("tratu_decription", bundle);
             }
         });
@@ -78,27 +72,4 @@ public class AdapterSearchResult extends RecyclerView.Adapter<AdapterSearchResul
         }
     }
 
-    private void saveLookupHistory(String word) {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        String userID = currentUser.getUid();
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        Map<String, Object> lookup = new HashMap<>();
-        lookup.put("userID", userID);
-        lookup.put("word", word);
-        lookup.put("timestamp", Timestamp.now());
-
-        // Add a new document with a generated ID
-        db.collection("LookupHistory")
-                .add(lookup)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener()    {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                    }
-                });
-    }
 }

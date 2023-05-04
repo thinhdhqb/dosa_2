@@ -1,50 +1,31 @@
 package com.example.dosa.utils;
 
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.text.style.ForegroundColorSpan;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.annotation.NonNull;
 
-import com.example.dosa.R;
-import com.example.dosa.data.entity.Definition;
-import com.example.dosa.data.entity.EngVieTranslation;
-import com.example.dosa.data.entity.IPA;
-import com.example.dosa.data.entity.Word;
-import com.example.dosa.data.entity.WordDetail;
 import com.example.dosa.ui.Activity.ReadingActivity;
-import com.example.dosa.ui.Adapter.AdapterTranslation;
-import com.example.dosa.ui.Fragment.FragmentTraTuDecription;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import java.io.InputStream;
 import java.text.BreakIterator;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 public class Utils {
 
@@ -86,6 +67,7 @@ public class Utils {
             @Override
             public void onClick(View widget) {
                 highlightSearchedTerm(textView, clickedWord, content, context);
+                ((ReadingActivity) context).lookupWords.add(clickedWord);
                 ((ReadingActivity) context).updateDialog(word);
             }
 
@@ -115,5 +97,29 @@ public class Utils {
         Spannable spannable = setSpannableText(textView, content, context);
         spannable.setSpan(new RoundedBackgroundSpan(context), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         textView.setText(spannable);
+    }
+
+    public static void saveLookupHistory(String word, Context context) {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        String userID = currentUser.getUid();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> lookup = new HashMap<>();
+        lookup.put("userID", userID);
+        lookup.put("word", word);
+        lookup.put("timestamp", Timestamp.now());
+
+        // Add a new document with a generated ID
+        db.collection("LookupHistory")
+                .add(lookup)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener()    {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                    }
+                });
     }
 }

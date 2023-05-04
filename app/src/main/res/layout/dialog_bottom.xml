@@ -58,12 +58,13 @@
             android:text="World" />
 
         <ImageView
-            android:id="@+id/imvGenealIPADialog"
+            android:id="@+id/imvGeneralIPADialog"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="6dp"
-            android:src="@drawable/img_30" />
+            android:src="@drawable/img_30"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtGeneralIPADialog"
@@ -96,7 +97,8 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="25dp"
-            android:src="@drawable/img_30" />
+            android:src="@drawable/img_30"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtUKIPADialog"
@@ -129,7 +131,8 @@
             android:layout_height="30dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="25dp"
-            android:src="@drawable/img_30" />
+            android:src="@drawable/img_30"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/txtUSIPADialog"

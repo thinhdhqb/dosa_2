@@ -20,7 +20,7 @@ import com.example.dosa.data.entity.IPA;
 import com.example.dosa.data.entity.Topic;
 import com.example.dosa.data.entity.Word;
 
-@Database(entities = {Word.class, Definition.class, DefinitionTopic.class, Topic.class, Example.class, IPA.class, EngVieTranslation.class}, version = 5)
+@Database(entities = {Word.class, Definition.class, DefinitionTopic.class, Topic.class, Example.class, IPA.class, EngVieTranslation.class}, version = 6)
 public abstract class MainDatabase extends RoomDatabase {
     public abstract DefinitionDAO definitionDAO();
     public abstract WordDAO wordDAO();
