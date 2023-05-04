@@ -73,6 +73,7 @@ public class ReadingActivity extends AppCompatActivity {
         dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
         lookupWords = new ArrayList<>();
 
+        binding.imgListen.setClickable(false);
 
 
 
@@ -111,7 +112,8 @@ public class ReadingActivity extends AppCompatActivity {
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
-                binding.imgListen.setVisibility(View.VISIBLE);
+                binding.imgListen.setColorFilter(R.color.black);
+                binding.imgListen.setClickable(true);
                 tts.setLanguage(Locale.UK);
 
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
@@ -219,12 +221,13 @@ public class ReadingActivity extends AppCompatActivity {
         imvUK = dialog.findViewById(R.id.imvUKIPADialog);
         imvUS = dialog.findViewById(R.id.imvUSIPADialog);
 
+
         ttsWord = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
-                imvUK.setVisibility(View.VISIBLE);
-                imvGeneral.setVisibility(View.VISIBLE);
-                imvUS.setVisibility(View.VISIBLE);
+                imvUK.setColorFilter(Color.BLACK);
+                imvGeneral.setColorFilter(Color.BLACK);
+                imvUS.setColorFilter(Color.BLACK);
             }
         });
 

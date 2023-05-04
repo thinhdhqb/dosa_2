@@ -54,11 +54,11 @@
                 android:layout_height="30dp"
                 android:layout_marginRight="34dp"
                 android:src="@drawable/img_33"
-                android:visibility="invisible"
+                app:tint="#bcbcbc"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/imgYeuThich"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:visibility="visible" />
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
