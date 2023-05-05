@@ -14,6 +14,7 @@ import com.example.dosa.data.dao.EngVieTranslationDAO;
 import com.example.dosa.data.dao.ExampleDAO;
 import com.example.dosa.data.dao.IPADAO;
 import com.example.dosa.data.dao.WordDAO;
+import com.example.dosa.data.dao.WordListDAO;
 import com.example.dosa.data.database.MainDatabase;
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.EngVieTranslation;
@@ -21,6 +22,7 @@ import com.example.dosa.data.entity.Example;
 import com.example.dosa.data.entity.IPA;
 import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.data.entity.Word;
+import com.example.dosa.data.entity.WordList;
 import com.google.zxing.common.StringUtils;
 
 import org.json.JSONArray;
@@ -45,6 +47,8 @@ public class Repository {
     private ExampleDAO exampleDAO;
     private IPADAO ipaDAO;
     private EngVieTranslationDAO engVieTranslationDAO;
+
+    private WordListDAO wordListDAO;
     private String API_KEY;
 
 
@@ -55,8 +59,7 @@ public class Repository {
         exampleDAO = db.exampleDAO();
         ipaDAO = db.ipaDAO();
         engVieTranslationDAO = db.engVieTranslationDAO();
-        API_KEY = application.getString(R.string.newsapi_apikey);
-
+        wordListDAO = db.wordListDAO();
     }
 
     public LiveData<Map<Definition, Example>> getDefinitionsAndExamplesByWord(String word) {
@@ -91,5 +94,15 @@ public class Repository {
     public LiveData<EngVieTranslation> getTranslationByWord(String word) {
         return engVieTranslationDAO.getTranslationByWord(word);
     }
+
+    public LiveData<List<WordList>> getAllWordList() {
+        return wordListDAO.getAllWordList();
+    }
+
+    public LiveData<List<String>> getWordsByWordListID(int id) {
+        return wordListDAO.getWordsByWordListID(id);
+    }
+
+
 
 }

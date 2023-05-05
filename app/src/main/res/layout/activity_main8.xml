@@ -85,7 +85,7 @@
         app:layout_constraintTop_toBottomOf="@id/cardView" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewYesterday"
+        android:id="@+id/rcvWordList"
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="10dp"
@@ -101,7 +101,7 @@
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewYesterday" />
+        app:layout_constraintTop_toBottomOf="@id/rcvWordList" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView7Yesterday"

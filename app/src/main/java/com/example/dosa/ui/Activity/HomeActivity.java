@@ -9,7 +9,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.speech.tts.TextToSpeech;
 import android.view.MenuItem;
 
 import com.example.dosa.R;
@@ -23,7 +22,7 @@ import com.example.dosa.ui.Fragment.Fragment_Account_Detail;
 import com.example.dosa.ui.Fragment.FragmentDictionary;
 import com.example.dosa.ui.Fragment.FragmentNews;
 import com.example.dosa.ui.Fragment.FragmentkhoTuDecription;
-import com.example.dosa.ui.Fragment.Fragmentkhotu;
+import com.example.dosa.ui.Fragment.FragmentWordList;
 import com.example.dosa.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.example.dosa.databinding.ActivityMain6Binding;
@@ -37,7 +36,7 @@ public class HomeActivity extends AppCompatActivity implements SendData {
     public FragmentNews fragmentNews;
     public FragmentAccount fragmentAccount;
     public FragmentHome fragmentHome;
-    public Fragmentkhotu fragmentkhotu;
+    public FragmentWordList fragmentWordList;
     public FragmentkhoTuDecription fragmentkhoTuDecription;
     public FragmentKhoTuDecriptionContinues fragmentKhoTuDecriptionContinues;
     Fragment[] fragments;
@@ -55,7 +54,7 @@ public class HomeActivity extends AppCompatActivity implements SendData {
 
         fragmentHome = new FragmentHome();
         fragmentDictionary = new FragmentDictionary();
-        fragmentkhotu = new Fragmentkhotu();
+        fragmentWordList = new FragmentWordList();
         fragmentAccount = new FragmentAccount();
         fragment_account_detail = new Fragment_Account_Detail();
         fragmentSetting = new FragmentSetting();
@@ -63,7 +62,7 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         fragmentkhoTuDecription = new FragmentkhoTuDecription();
         fragmentDictionaryDetail = new FragmentDictionaryDetail();
         fragmentKhoTuDecriptionContinues = new FragmentKhoTuDecriptionContinues();
-        fragments = new Fragment[]{fragmentHome, fragmentDictionary, fragmentkhotu, fragmentAccount, fragment_account_detail,
+        fragments = new Fragment[]{fragmentHome, fragmentDictionary, fragmentWordList, fragmentAccount, fragment_account_detail,
                 fragmentSetting, fragmentNews, fragmentkhoTuDecription, fragmentKhoTuDecriptionContinues, fragmentDictionaryDetail};
 
 
@@ -88,7 +87,7 @@ public class HomeActivity extends AppCompatActivity implements SendData {
                     showFragment(fragmentDictionary);
                     return true;
                 case R.id.menuKhoTu:
-                    showFragment(fragmentkhotu);
+                    showFragment(fragmentWordList);
                     return true;
                 case R.id.menuTaiKhoan:
                     showFragment(fragmentAccount);
@@ -194,6 +193,10 @@ public class HomeActivity extends AppCompatActivity implements SendData {
     public void onBackPressed() {
         if (fragmentDictionaryDetail.isVisible()) {
             showFragment(fragmentDictionary);
+            return;
+        }
+        if (fragmentNews.isVisible()) {
+            showFragment(fragmentHome);
             return;
         }
         Intent a = new Intent(Intent.ACTION_MAIN);

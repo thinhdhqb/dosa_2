@@ -2,6 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+        android:clickable="false"
+        android:duplicateParentState="true"
     android:orientation="vertical">
 
     <TextView
@@ -9,12 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/noun"
+        android:duplicateParentState="true"
         android:textColor="@color/black"
         android:textSize="16sp"
         android:textStyle="italic" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcvDefinition"
+        android:duplicateParentState="true"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

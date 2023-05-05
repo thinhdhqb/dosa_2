@@ -362,6 +362,7 @@ public class ReadingActivity extends AppCompatActivity {
 
     private void back() {
         // send back look up words
+        tts.stop();
         Intent intent = new Intent();
         intent.putExtra("lookupWords", lookupWords.toArray(new String[0]));
         setResult(RESULT_OK, intent);

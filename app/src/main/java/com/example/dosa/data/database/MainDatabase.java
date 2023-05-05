@@ -12,6 +12,7 @@ import com.example.dosa.data.dao.EngVieTranslationDAO;
 import com.example.dosa.data.dao.ExampleDAO;
 import com.example.dosa.data.dao.IPADAO;
 import com.example.dosa.data.dao.WordDAO;
+import com.example.dosa.data.dao.WordListDAO;
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.DefinitionTopic;
 import com.example.dosa.data.entity.EngVieTranslation;
@@ -19,8 +20,10 @@ import com.example.dosa.data.entity.Example;
 import com.example.dosa.data.entity.IPA;
 import com.example.dosa.data.entity.Topic;
 import com.example.dosa.data.entity.Word;
+import com.example.dosa.data.entity.WordList;
+import com.example.dosa.data.entity.WordList_Word;
 
-@Database(entities = {Word.class, Definition.class, DefinitionTopic.class, Topic.class, Example.class, IPA.class, EngVieTranslation.class}, version = 6)
+@Database(entities = {Word.class, Definition.class, DefinitionTopic.class, Topic.class, Example.class, IPA.class, EngVieTranslation.class, WordList_Word.class, WordList.class}, version = 8)
 public abstract class MainDatabase extends RoomDatabase {
     public abstract DefinitionDAO definitionDAO();
     public abstract WordDAO wordDAO();
@@ -28,6 +31,7 @@ public abstract class MainDatabase extends RoomDatabase {
 
     public abstract IPADAO ipaDAO();
     public abstract EngVieTranslationDAO engVieTranslationDAO();
+    public abstract WordListDAO wordListDAO();
 
     private static MainDatabase INSTANCE;
 

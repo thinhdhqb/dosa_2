@@ -24,12 +24,9 @@ public class LookupHistoryActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         list = new ArrayList<>();
         stringList = new ArrayList<>();
-
-        list.add("Optimism");
-        list.add("Pessimism");
         AdapterHistory adapterHistory = new AdapterHistory(list, getApplicationContext(), null);
-        binding.recyclerViewYesterday.setAdapter(adapterHistory);
-        binding.recyclerViewYesterday.setLayoutManager(new LinearLayoutManager(this));
+        binding.rcvWordList.setAdapter(adapterHistory);
+        binding.rcvWordList.setLayoutManager(new LinearLayoutManager(this));
 
         stringList.add("Exquisite");
         stringList.add("Innovations");

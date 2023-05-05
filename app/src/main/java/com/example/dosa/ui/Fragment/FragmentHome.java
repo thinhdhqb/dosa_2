@@ -97,6 +97,8 @@ public class FragmentHome extends Fragment {
     private void fetchArticles() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Article")
+                .orderBy("date", Query.Direction.DESCENDING)
+                .limit(10)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
