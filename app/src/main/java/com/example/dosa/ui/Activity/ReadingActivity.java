@@ -112,7 +112,7 @@ public class ReadingActivity extends AppCompatActivity {
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
-                binding.imgListen.setColorFilter(R.color.black);
+                binding.imgListen.setColorFilter(Color.parseColor("#5c5c5c"));
                 binding.imgListen.setClickable(true);
                 tts.setLanguage(Locale.UK);
 
@@ -225,9 +225,9 @@ public class ReadingActivity extends AppCompatActivity {
         ttsWord = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int i) {
-                imvUK.setColorFilter(Color.BLACK);
-                imvGeneral.setColorFilter(Color.BLACK);
-                imvUS.setColorFilter(Color.BLACK);
+                imvUK.setColorFilter(Color.parseColor("#5c5c5c"));
+                imvGeneral.setColorFilter(Color.parseColor("#5c5c5c"));
+                imvUS.setColorFilter(Color.parseColor("#5c5c5c"));
             }
         });
 
@@ -262,6 +262,10 @@ public class ReadingActivity extends AppCompatActivity {
 
 
         binding.txtBackReading.setOnClickListener(view -> {
+            back();
+        });
+
+        binding.textView3.setOnClickListener(view -> {
             back();
         });
     }

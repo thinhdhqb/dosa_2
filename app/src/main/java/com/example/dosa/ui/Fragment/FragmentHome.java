@@ -64,15 +64,8 @@ public class FragmentHome extends Fragment {
 
         fetchArticles();
 
-        binding.imgNews.setOnClickListener(view -> {
+        binding.txtAllNews.setOnClickListener(view -> {
             sendData.sendData("news", null);
-        });
-
-        binding.btnLuyenTap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getContext(), MultipleChoiceActivity.class));
-            }
         });
 
         return binding.getRoot();

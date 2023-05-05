@@ -16,10 +16,4 @@
         android:text="TextView"
         android:textSize="16sp" />
 
-    <ImageView
-        android:id="@+id/imvHeartWord"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_weight="0"
-        app:srcCompat="@drawable/img_32" />
 </LinearLayout>
