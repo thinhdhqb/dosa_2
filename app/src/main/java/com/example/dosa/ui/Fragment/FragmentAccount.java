@@ -49,13 +49,14 @@ public class FragmentAccount extends Fragment {
         });
 
         binding.layoutLikedArticle.setOnClickListener(view -> {
-            getContext().startActivity(new Intent(getContext(), LookupHistoryActivity.class));
+            sendData.sendData("likedArticles", null);
         });
 
         binding.layoutLikedWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendData.sendData("setting", null);
+                sendData.sendData("likedWords", null);
+
             }
         });
 

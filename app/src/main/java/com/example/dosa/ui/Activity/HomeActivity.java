@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.example.dosa.R;
+import com.example.dosa.ui.Fragment.FragmentLikedArticle;
+import com.example.dosa.ui.Fragment.FragmentLikedWord;
 import com.example.dosa.ui.Fragment.SendData;
 import com.example.dosa.ui.Fragment.FragmentAccount;
 import com.example.dosa.ui.Fragment.FragmentHome;
@@ -39,6 +41,10 @@ public class HomeActivity extends AppCompatActivity implements SendData {
     public FragmentWordList fragmentWordList;
     public FragmentkhoTuDecription fragmentkhoTuDecription;
     public FragmentKhoTuDecriptionContinues fragmentKhoTuDecriptionContinues;
+    public FragmentLikedWord fragmentLikedWord;
+    public FragmentLikedArticle fragmentLikedArticle;
+
+
     Fragment[] fragments;
     FragmentSetting fragmentSetting;
     public FragmentDictionaryDetail fragmentDictionaryDetail;
@@ -56,14 +62,13 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         fragmentDictionary = new FragmentDictionary();
         fragmentWordList = new FragmentWordList();
         fragmentAccount = new FragmentAccount();
-        fragment_account_detail = new Fragment_Account_Detail();
-        fragmentSetting = new FragmentSetting();
         fragmentNews = new FragmentNews();
         fragmentkhoTuDecription = new FragmentkhoTuDecription();
         fragmentDictionaryDetail = new FragmentDictionaryDetail();
-        fragmentKhoTuDecriptionContinues = new FragmentKhoTuDecriptionContinues();
-        fragments = new Fragment[]{fragmentHome, fragmentDictionary, fragmentWordList, fragmentAccount, fragment_account_detail,
-                fragmentSetting, fragmentNews, fragmentkhoTuDecription, fragmentKhoTuDecriptionContinues, fragmentDictionaryDetail};
+        fragmentLikedArticle = new FragmentLikedArticle();
+        fragmentLikedWord = new FragmentLikedWord();
+        fragments = new Fragment[]{fragmentHome, fragmentDictionary, fragmentWordList, fragmentAccount,
+                 fragmentNews, fragmentkhoTuDecription, fragmentDictionaryDetail, fragmentLikedWord, fragmentLikedArticle};
 
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -142,13 +147,13 @@ public class HomeActivity extends AppCompatActivity implements SendData {
     public void sendData(String a, Bundle data) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        if (a.equals("account_detail")) {
-            showFragment(fragment_account_detail);
+        if (a.equals("likedWords")) {
+            fragmentLikedWord.fetchLikedWords();
+            showFragment(fragmentLikedWord);
         }else if(a.equals("account")){
             showFragment(fragmentAccount);
-        }else if (a.equals("setting")){
-            fragmentTransaction.replace(R.id.frameLayout, fragmentSetting, null);
-            fragmentTransaction.commit();
+        }else if (a.equals("likedArticles")){
+            showFragment(fragmentLikedArticle);
         }else if(a.equals("news")){
             fragmentNews.fetchArticles();
             showFragment(fragmentNews);
