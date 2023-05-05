@@ -46,7 +46,6 @@
             android:id="@+id/edtEmailSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_edt"
             android:hint="@string/email" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -68,7 +67,6 @@
             android:id="@+id/edtPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_edt"
             android:hint="@string/password"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -90,7 +88,6 @@
             android:id="@+id/edtName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_edt"
             android:hint="@string/name" />
 
     </com.google.android.material.textfield.TextInputLayout>
