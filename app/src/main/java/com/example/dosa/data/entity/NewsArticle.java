@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class NewsArticle {
+
+    private String id;
     private String title;
     private String link;
     private ArrayList<String> keywords;
@@ -20,8 +22,9 @@ public class NewsArticle {
     public NewsArticle() {
     }
 
-    public NewsArticle(String title, String link, ArrayList<String> keywords, ArrayList<String> creator, String description, String content, String date, Bitmap image, String source) {
+    public NewsArticle(String id, String title, String link, ArrayList<String> keywords, ArrayList<String> creator, String description, String content, String date, Bitmap image, String source) {
         this.title = title;
+        this.id = id;
         this.link = link;
         this.keywords = keywords;
         this.creator = creator;
@@ -38,6 +41,14 @@ public class NewsArticle {
 
     public ArrayList<String> getKeywords() {
         return keywords;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getContent() {

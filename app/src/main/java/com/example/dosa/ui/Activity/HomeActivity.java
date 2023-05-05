@@ -143,15 +143,14 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         if (a.equals("account_detail")) {
-            fragmentTransaction.replace(R.id.frameLayout, fragment_account_detail, null);
-            fragmentTransaction.commit();
+            showFragment(fragment_account_detail);
         }else if(a.equals("account")){
-            fragmentTransaction.replace(R.id.frameLayout, fragmentAccount, null);
-            fragmentTransaction.commit();
+            showFragment(fragmentAccount);
         }else if (a.equals("setting")){
             fragmentTransaction.replace(R.id.frameLayout, fragmentSetting, null);
             fragmentTransaction.commit();
         }else if(a.equals("news")){
+            fragmentNews.fetchArticles();
             showFragment(fragmentNews);
         }else if (a.equals("tratu_decription")){
             fragmentDictionaryDetail.updateUI(data.getString("word"));

@@ -43,12 +43,12 @@ public class FragmentNews extends Fragment {
         binding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rcvNews.setHasFixedSize(true);
 
-        fetchArticles();
 
         return binding.getRoot();
     }
 
-    private void fetchArticles() {
+
+    public void fetchArticles() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("Article")
                 .orderBy("date", Query.Direction.DESCENDING)
@@ -72,7 +72,7 @@ public class FragmentNews extends Fragment {
                                 String date = document.getString("date");
                                 String imageURL = document.getString("imageURL");
                                 String source = document.getString("source");
-                                NewsArticle newsArticle = new NewsArticle(title, link, keywords, creator, description, content, date, null, source);
+                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, null, source);
                                 new DownloadImageTask(newsArticle).execute(imageURL);
                             }
                         } else {

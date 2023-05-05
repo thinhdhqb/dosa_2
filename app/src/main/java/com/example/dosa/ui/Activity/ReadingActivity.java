@@ -1,5 +1,6 @@
 package com.example.dosa.ui.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.EngVieTranslation;
@@ -37,6 +39,15 @@ import com.example.dosa.ui.Adapter.AdapterDictionarySectionHistory;
 import com.example.dosa.ui.Adapter.AdapterTranslation;
 import com.example.dosa.utils.Utils;
 import com.example.dosa.viewmodel.DictionaryViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -45,8 +56,10 @@ import org.jsoup.select.Elements;
 
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ReadingActivity extends AppCompatActivity {
     ActivityMain9Binding binding;
@@ -64,11 +77,18 @@ public class ReadingActivity extends AppCompatActivity {
     public ArrayList<String> lookupWords;
     private String SETTING_PREF = "settingPref";
 
+    Boolean isLiked = false;
+    String userID;
+    FirebaseFirestore db;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMain9Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
+
 
         dictionaryViewModel = new ViewModelProvider(this).get(DictionaryViewModel.class);
         lookupWords = new ArrayList<>();
@@ -79,6 +99,7 @@ public class ReadingActivity extends AppCompatActivity {
 
         // Get intent
         Intent intent = getIntent();
+        String articleID = intent.getStringExtra("id");
         String title = intent.getStringExtra("title");
         String keyword = intent.getStringExtra("keyword");
         String source = intent.getStringExtra("source");
@@ -268,6 +289,30 @@ public class ReadingActivity extends AppCompatActivity {
         binding.textView3.setOnClickListener(view -> {
             back();
         });
+
+        // save article
+
+        binding.imgYeuThich.setEnabled(false);
+        binding.imgYeuThich.setClickable(false);
+        fetchArticleState(articleID);
+        binding.imgYeuThich.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isLiked) {
+                    binding.imgYeuThich.setImageResource(R.drawable.img_22);
+                    likeArticle(articleID);
+                    isLiked = true;
+
+                }
+                else {
+                    binding.imgYeuThich.setImageResource(R.drawable.img_32);
+                    unlikeArticle(articleID);
+
+                    isLiked = false;
+
+                }
+            }
+        });
     }
 
     public void updateDialog(String word) {
@@ -435,4 +480,54 @@ public class ReadingActivity extends AppCompatActivity {
         }
         editor.commit();
     }
+
+    private void likeArticle(String articleID) {
+        Map<String, Object> doc = new HashMap<>();
+        doc.put("userID", userID);
+        doc.put("articleID", articleID);
+        db.collection("FavouriteArticle")
+                .add(doc)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Toast.makeText(ReadingActivity.this, "Đã thêm bài báo vào mục yêu thích", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+    private void unlikeArticle(String articleID) {
+        db.collection("FavouriteArticle")
+                .whereEqualTo("userID", userID)
+                .whereEqualTo("articleID", articleID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                            doc.getReference().delete();
+                        }
+                        Toast.makeText(ReadingActivity.this, "Đã xóa bài báo ở mục yêu thích", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+    private void fetchArticleState(String articleID) {
+        db.collection("FavouriteArticle")
+                .whereEqualTo("userID", userID)
+                .whereEqualTo("articleID", articleID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult().getDocuments().size() != 0) {
+                            binding.imgYeuThich.setImageResource(R.drawable.img_22);
+                        }
+                        binding.imgYeuThich.setClickable(true);
+                        binding.imgYeuThich.setEnabled(true);
+                    }
+                });
+    }
+
 }

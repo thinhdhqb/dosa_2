@@ -56,29 +56,32 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ReadingActivity.class);
+            intent.putExtra("id", newsArticle.getId());
             intent.putExtra("title", newsArticle.getTitle());
             intent.putExtra("content", newsArticle.getContent());
             intent.putExtra("source", newsArticle.getSource());
             intent.putExtra("keyword", newsArticle.getKeywords().get(0));
             intent.putExtra("date", newsArticle.getDate());
+
             // save image
             try {
                 //Write file
-                Bitmap bmp = newsArticle.getImage();
                 String filename = "bitmap.png";
+                Bitmap bmp = newsArticle.getImage();
                 FileOutputStream stream = context.openFileOutput(filename, Context.MODE_PRIVATE);
                 bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
                 //Cleanup
                 stream.close();
 //                bmp.recycle();
+                intent.putExtra("image", filename);
 
                 //Pop intent
-                intent.putExtra("image", filename);
-                ((Activity) context).startActivityForResult(intent, 123);
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            ((Activity) context).startActivityForResult(intent, 123);
+
         });
 
     }

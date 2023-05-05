@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -17,16 +18,25 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.dosa.R;
 import com.example.dosa.databinding.FragmentTratuDecriptionBinding;
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.EngVieTranslation;
 import com.example.dosa.data.entity.IPA;
 import com.example.dosa.data.entity.Word;
 import com.example.dosa.data.entity.WordDetail;
+import com.example.dosa.ui.Activity.ReadingActivity;
 import com.example.dosa.ui.Adapter.AdapterDictionarySection;
 import com.example.dosa.ui.Adapter.AdapterSearchResult;
 import com.example.dosa.ui.Adapter.AdapterTranslation;
 import com.example.dosa.viewmodel.DictionaryViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -34,8 +44,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class FragmentDictionaryDetail extends Fragment {
     FragmentTratuDecriptionBinding binding;
@@ -47,10 +59,17 @@ public class FragmentDictionaryDetail extends Fragment {
     AdapterSearchResult adapterSearchResult;
     TextToSpeech tts;
 
+    Boolean isLiked = false;
+    String userID;
+    FirebaseFirestore db;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentTratuDecriptionBinding.inflate(inflater,container,false);
+
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        db = FirebaseFirestore.getInstance();
 
         tts = new TextToSpeech(getActivity(), new TextToSpeech.OnInitListener() {
             @Override
@@ -109,10 +128,19 @@ public class FragmentDictionaryDetail extends Fragment {
                 }
             }
         });
+
+
+        // save word
+        binding.imvLikeWord.setEnabled(false);
+        binding.imvLikeWord.setClickable(false);
+
+
         return binding.getRoot();
     }
 
     public void updateUI(String word) {
+        fetchWordState(word);
+
         binding.layoutGeneralIPA.setVisibility(View.GONE);
         binding.layoutUSIPA.setVisibility(View.GONE);
         binding.layoutUKIPA.setVisibility(View.GONE);
@@ -145,6 +173,24 @@ public class FragmentDictionaryDetail extends Fragment {
             public void onClick(View view) {
                 tts.setLanguage(Locale.ENGLISH);
                 tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
+            }
+        });
+        binding.imvLikeWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (!isLiked) {
+                    binding.imvLikeWord.setImageResource(R.drawable.img_22);
+                    likeWord(word);
+                    isLiked = true;
+
+                }
+                else {
+                    binding.imvLikeWord.setImageResource(R.drawable.img_32);
+                    unlikeWord(word);
+
+                    isLiked = false;
+
+                }
             }
         });
     }
@@ -242,6 +288,53 @@ public class FragmentDictionaryDetail extends Fragment {
         super.onDetach();
         sendData = null;
     }
+    private void likeWord(String word) {
+        Map<String, Object> doc = new HashMap<>();
+        doc.put("userID", userID);
+        doc.put("word", word);
+        db.collection("FavouriteWord")
+                .add(doc)
+                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentReference> task) {
+                        Toast.makeText(FragmentDictionaryDetail.this.getActivity(), "Đã thêm từ vựng vào mục yêu thích", Toast.LENGTH_SHORT).show();
 
+                    }
+                });
+    }
+
+    private void unlikeWord(String word) {
+        db.collection("FavouriteWord")
+                .whereEqualTo("userID", userID)
+                .whereEqualTo("word", word)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        for (DocumentSnapshot doc : task.getResult().getDocuments()) {
+                            doc.getReference().delete();
+                        }
+                        Toast.makeText(FragmentDictionaryDetail.this.getActivity(), "Đã xóa từ vựng ở mục yêu thích", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+    }
+
+    private void fetchWordState(String word) {
+        db.collection("FavouriteWord")
+                .whereEqualTo("userID", userID)
+                .whereEqualTo("word", word)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.getResult().getDocuments().size() != 0) {
+                            binding.imvLikeWord.setImageResource(R.drawable.img_22);
+                        }
+                        binding.imvLikeWord.setClickable(true);
+                        binding.imvLikeWord.setEnabled(true);
+                    }
+                });
+    }
 
 }

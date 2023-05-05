@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import com.example.dosa.ui.Activity.MainActivity;
 import com.example.dosa.ui.Activity.NewPasswordActivity;
 
 import com.example.dosa.databinding.FragmentAccountBinding;
+import com.example.dosa.ui.Activity.ResetPasswordActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -32,23 +34,25 @@ public class FragmentAccount extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FragmentAccountBinding.inflate(inflater, container, false);
         mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = mAuth.getCurrentUser();
 
-        binding.imgEdit.setOnClickListener(view -> {
-            sendData.sendData("account_detail", null);
-        });
 
-        binding.contralayout1.setOnClickListener(new View.OnClickListener() {
+        binding.layoutResetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getContext().startActivity(new Intent(getContext(), NewPasswordActivity.class));
+                if (user.getProviderId().equals("password")) {
+                    getContext().startActivity(new Intent(getContext(), ResetPasswordActivity.class));
+                }
+                else
+                    Toast.makeText(mainActivity, "Tài khoản này không sử dụng mật khẩu", Toast.LENGTH_SHORT).show();
             }
         });
 
-        binding.contranHistory.setOnClickListener(view -> {
+        binding.layoutLikedArticle.setOnClickListener(view -> {
             getContext().startActivity(new Intent(getContext(), LookupHistoryActivity.class));
         });
 
-        binding.contranSetting.setOnClickListener(new View.OnClickListener() {
+        binding.layoutLikedWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendData.sendData("setting", null);
@@ -66,7 +70,6 @@ public class FragmentAccount extends Fragment {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         binding.txtUserDisplayName.setText(currentUser.getDisplayName());
         binding.txtUserEmail.setText(currentUser.getEmail());
-        binding.txtUserPhone.setText(currentUser.getPhoneNumber());
         return binding.getRoot();
     }
 

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +112,8 @@ public class FragmentHome extends Fragment {
                                 String date = document.getString("date");
                                 String imageURL = document.getString("imageURL");
                                 String source = document.getString("source");
-                                NewsArticle newsArticle = new NewsArticle(title, link, keywords, creator, description, content, date, null, source);
+                                Log.d("NewsArticle", "onComplete: " +document.getId() );
+                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, null, source);
                                 new DownloadImageTask(newsArticle).execute(imageURL);
                             }
                         } else {
@@ -119,6 +121,7 @@ public class FragmentHome extends Fragment {
                     }
                 });
     }
+
 
     private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         NewsArticle newsArticle;
@@ -145,4 +148,5 @@ public class FragmentHome extends Fragment {
             adapterNews.notifyDataSetChanged();
         }
     }
+
 }
