@@ -1,6 +1,9 @@
 package com.example.dosa.ui.Fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +14,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.databinding.FragmentLikedWordsBinding;
+import com.example.dosa.databinding.FragmentTudienBinding;
 import com.example.dosa.ui.Adapter.AdapterLikedWord;
+import com.example.dosa.ui.Adapter.AdapterNews;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 
 public class FragmentLikedArticle extends Fragment {
@@ -44,12 +52,12 @@ public class FragmentLikedArticle extends Fragment {
         binding.rcvNews.setAdapter(adapter);
         binding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rcvNews.setHasFixedSize(true);
-        fetchLikedWords();
         return binding.getRoot();
     }
 
 
     public void fetchLikedWords() {
+        adapter.list.clear();
         db.collection("FavouriteWord")
                 .whereEqualTo("userID", userID)
                 .get()

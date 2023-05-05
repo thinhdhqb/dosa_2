@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -18,15 +20,18 @@ import com.example.dosa.ui.Fragment.SendData;
 
 import java.util.ArrayList;
 
-public class AdapterLikedWord extends RecyclerView.Adapter<AdapterLikedWord.MyViewHolder>{
+public class AdapterLikedWord extends RecyclerView.Adapter<AdapterLikedWord.MyViewHolder> implements Filterable {
     Context context;
     SendData sendData;
     public ArrayList<String> list;
+    public ArrayList<String> filteredList;
 
     public AdapterLikedWord(Context context, ArrayList<String> list, SendData sendData) {
         this.context = context;
         this.list = list;
         this.sendData = sendData;
+        filteredList = list;
+
     }
 
     @NonNull
@@ -40,17 +45,48 @@ public class AdapterLikedWord extends RecyclerView.Adapter<AdapterLikedWord.MyVi
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        holder.txtWord.setText(list.get(position));
+        holder.txtWord.setText(filteredList.get(position));
         holder.itemView.setOnClickListener(view -> {
             Bundle bundle = new Bundle();
-            bundle.putString("word", list.get(position));
+            bundle.putString("word", filteredList.get(position));
             sendData.sendData("tratu_decription", bundle);
         });
     }
 
     @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredList = list;
+                } else {
+                    filteredList = new ArrayList<>();
+                    for (String s : list) {
+                        if (s.toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(s);
+                        }
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredList = (ArrayList<String>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    @Override
     public int getItemCount() {
-        return list.size();
+        return filteredList.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
