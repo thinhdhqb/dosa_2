@@ -4,7 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activity.OTPActivity">
+    tools:context=".ui.Activity.ResetPasswordActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_absoluteHeight="56dp"
+        tools:layout_conversion_absoluteWidth="411dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="16dp"
+            tools:layout_editor_absoluteY="16dp">
+
+            <TextView
+                android:id="@+id/txtBackArrowForgot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
+                android:textColor="#DE2671"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/txtBackForgot"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginRight="40dp"
+                android:text="Đăng nhập"
+                android:textColor="@color/primary"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+    </androidx.appcompat.widget.Toolbar>
 
     <ImageView
         android:id="@+id/imgLogo"
@@ -22,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginTop="10dp"
-        android:text="@string/code"
+        android:text="Nhập email"
         android:textColor="@color/black"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -41,40 +79,42 @@
         android:layout_marginBottom="20dp"
         app:endIconMode="clear_text"
         app:layout_constraintTop_toBottomOf="@id/txtDangNhap"
-        app:startIconDrawable="@drawable/baseline_fiber_pin_24">
+        app:startIconDrawable="@drawable/baseline_email_24">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edtEmailSignUp"
+            android:id="@+id/edtEmailForgot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/custom_edt"
-            android:hint="@string/otp" />
+            android:layout_weight="1"
+            android:hint="@string/email" />
+
+
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/txtForgotPassword"
+        android:id="@+id/txtMessageForgot"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="20dp"
-        android:text="@string/forward"
-        android:textColor="#DE2671"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtOTP" />
+        android:text="Vui lòng nhập mail của bạn để đổi mật khẩu"
+        android:textColor="@color/primary"
+        app:layout_constraintBottom_toTopOf="@+id/btnComfirm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtOTP" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnComfirm"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_margin="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="72dp"
         android:background="@drawable/custtom_btn"
-        android:text="@string/comfirm"
+        android:text="Gửi mail"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtForgotPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/txtOTP" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

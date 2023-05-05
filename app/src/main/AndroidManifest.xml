@@ -41,7 +41,7 @@
             android:name=".ui.Activity.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.Activity.OTPActivity"
+            android:name=".ui.Activity.ResetPasswordActivity"
             android:exported="false" />
         <activity
             android:name=".ui.Activity.SignUpActivity"

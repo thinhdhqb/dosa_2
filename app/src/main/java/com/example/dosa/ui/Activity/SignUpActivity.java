@@ -191,8 +191,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 });
                         } else {
                             // If sign in fails, display a message to the user.
-//                            txtMessage.setText("Email đã tồn tại");
-                            txtMessage.setText(task.getException().getMessage());
+                            txtMessage.setText("Email đã tồn tại");
                             txtMessage.setVisibility(View.VISIBLE);
                         }
                     }
