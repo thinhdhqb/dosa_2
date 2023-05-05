@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -23,15 +25,18 @@ import com.example.dosa.utils.Utils;
 
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
-public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
+public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> implements Filterable {
     Context context;
-    List<NewsArticle> list;
+    public List<NewsArticle> list;
+    public List<NewsArticle> filteredList;
 
     public AdapterNews(Context context, List<NewsArticle> list) {
         this.context = context;
         this.list = list;
+        this.filteredList = list;
     }
 
     @NonNull
@@ -45,7 +50,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
 
     @Override
     public void onBindViewHolder(@NonNull viewHolider holder, int position) {
-        NewsArticle newsArticle = list.get(position);
+        NewsArticle newsArticle = filteredList.get(position);
 
         if (newsArticle.getKeywords() == null) {
             holder.txtType.setText("Other");
@@ -89,6 +94,36 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> {
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    filteredList = list;
+                } else {
+                    filteredList = new ArrayList<>();
+                    for (NewsArticle article : list) {
+                        if (article.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(article);
+                        }
+                    }
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredList;
+
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                filteredList = (ArrayList<NewsArticle>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class viewHolider extends RecyclerView.ViewHolder {

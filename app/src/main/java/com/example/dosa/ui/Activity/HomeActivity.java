@@ -153,6 +153,7 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         }else if(a.equals("account")){
             showFragment(fragmentAccount);
         }else if (a.equals("likedArticles")){
+            fragmentLikedArticle.fetchArticlesID();
             showFragment(fragmentLikedArticle);
         }else if(a.equals("news")){
             fragmentNews.fetchArticles();

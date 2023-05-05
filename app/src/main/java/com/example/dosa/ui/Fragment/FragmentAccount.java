@@ -40,11 +40,7 @@ public class FragmentAccount extends Fragment {
         binding.layoutResetPass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.getProviderId().equals("password")) {
-                    getContext().startActivity(new Intent(getContext(), ResetPasswordActivity.class));
-                }
-                else
-                    Toast.makeText(mainActivity, "Tài khoản này không sử dụng mật khẩu", Toast.LENGTH_SHORT).show();
+                getContext().startActivity(new Intent(getContext(), ResetPasswordActivity.class));
             }
         });
 
