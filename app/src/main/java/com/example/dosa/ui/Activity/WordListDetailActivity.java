@@ -62,9 +62,26 @@ public class WordListDetailActivity extends AppCompatActivity {
         binding.btnPractice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
                 Intent intent = new Intent(WordListDetailActivity.this, FlashcardActivity.class);
                 intent.putStringArrayListExtra("wordList", adapter.list);
                 startActivity(intent);
+            }
+        });
+
+        binding.txtBackWordList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                    WordListDetailActivity.this.onBackPressed();
+            }
+        });
+
+        binding.txtBackTextWordList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                WordListDetailActivity.this.onBackPressed();
+
             }
         });
 

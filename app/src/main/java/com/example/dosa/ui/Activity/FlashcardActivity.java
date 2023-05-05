@@ -10,6 +10,7 @@ import android.animation.AnimatorInflater;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,7 +35,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 public class FlashcardActivity extends AppCompatActivity {
     ActivityFlashcardBinding binding;
@@ -46,6 +49,7 @@ public class FlashcardActivity extends AppCompatActivity {
     AdapterTranslation adapterTranslation;
     int totalWords;
     int currentIndex = 0;
+    TextToSpeech tts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,13 @@ public class FlashcardActivity extends AppCompatActivity {
         binding.rcvDefinitionFlash.setLayoutManager(new LinearLayoutManager(this));
         binding.rcvTranslationFlash.setAdapter(adapterTranslation);
         binding.rcvTranslationFlash.setLayoutManager(new LinearLayoutManager(this));
+
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                tts.setLanguage(Locale.ENGLISH);
+            }
+        });
 
 
         Intent intent = getIntent();
@@ -126,16 +137,9 @@ public class FlashcardActivity extends AppCompatActivity {
                     isFlipped = false;
                     resetFrontAnim.setTarget(binding.cardViewBack);
                     resetBackAnim.setTarget(binding.cardViewFront);
-                    resetFrontAnim.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            binding.cardViewFront.bringToFront();
-                            resetBackAnim.start();
-
-                        }
-                    });
                     resetFrontAnim.start();
+                    resetBackAnim.start();
+
                 }
                 currentIndex++;
                 loadWordCard(currentIndex);
@@ -157,16 +161,8 @@ public class FlashcardActivity extends AppCompatActivity {
                     isFlipped = false;
                     resetFrontAnim.setTarget(binding.cardViewBack);
                     resetBackAnim.setTarget(binding.cardViewFront);
-                    resetFrontAnim.addListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            super.onAnimationEnd(animation);
-                            binding.cardViewFront.bringToFront();
-                            resetBackAnim.start();
-
-                        }
-                    });
                     resetFrontAnim.start();
+                    resetBackAnim.start();
                 }
                 currentIndex--;
                 loadWordCard(currentIndex);
@@ -181,6 +177,21 @@ public class FlashcardActivity extends AppCompatActivity {
             }
         });
 
+        binding.txtBackWordList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FlashcardActivity.this.onBackPressed();
+            }
+        });
+
+        binding.imvShuffle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Collections.shuffle(wordList);
+                loadWordCard(currentIndex);
+            }
+        });
+
 
         loadWordCard(0);
     }
@@ -188,6 +199,7 @@ public class FlashcardActivity extends AppCompatActivity {
     private void loadWordCard(int index) {
         // Looad
         String word = wordList.get(index);
+        tts.speak(word, TextToSpeech.QUEUE_FLUSH, null);
         fetchData(word);
         binding.txtWordFlash.setText(word);
         binding.txtNumber.setText((index+1) + "/" + totalWords);

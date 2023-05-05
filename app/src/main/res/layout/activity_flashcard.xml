@@ -28,20 +28,29 @@
                 android:id="@+id/txtBackWordList"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="0"
                 android:drawableLeft="@drawable/baseline_arrow_back_ios_24"
                 android:textColor="#DE2671"
                 android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txtNumber"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginRight="40dp"
+                android:layout_weight="1"
                 android:text="0/0"
                 android:textAlignment="center"
                 android:textColor="@color/primary"
                 android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/imvShuffle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="0"
+                app:srcCompat="@drawable/baseline_shuffle_24" />
 
         </LinearLayout>
 
