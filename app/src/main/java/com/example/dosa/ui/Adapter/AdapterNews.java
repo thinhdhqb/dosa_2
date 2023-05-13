@@ -14,10 +14,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.dosa.R;
 import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.ui.Activity.ReadingActivity;
@@ -35,8 +37,8 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> i
 
     public AdapterNews(Context context, List<NewsArticle> list) {
         this.context = context;
-        this.list = list;
-        this.filteredList = list;
+        this.list = new ArrayList<>();
+        this.filteredList = new ArrayList<>();
     }
 
     @NonNull
@@ -57,7 +59,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> i
         }
         else holder.txtType.setText(newsArticle.getKeywords().get(0));
         holder.txtDecription.setText(newsArticle.getTitle());
-        holder.imgHinhAnh.setImageBitmap(newsArticle.getImage());
+        Glide.with(context).load(newsArticle.getImageURL()).into(holder.imgHinhAnh);
 
         holder.itemView.setOnClickListener(view -> {
             Intent intent = new Intent(context, ReadingActivity.class);
@@ -67,24 +69,9 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> i
             intent.putExtra("source", newsArticle.getSource());
             intent.putExtra("keyword", newsArticle.getKeywords().get(0));
             intent.putExtra("date", newsArticle.getDate());
+            intent.putExtra("imageURL", newsArticle.getImageURL());
 
-            // save image
-            try {
-                //Write file
-                String filename = "bitmap.png";
-                Bitmap bmp = newsArticle.getImage();
-                FileOutputStream stream = context.openFileOutput(filename, Context.MODE_PRIVATE);
-                bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
 
-                //Cleanup
-                stream.close();
-//                bmp.recycle();
-                intent.putExtra("image", filename);
-
-                //Pop intent
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             ((Activity) context).startActivityForResult(intent, 123);
 
         });
@@ -93,7 +80,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> i
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return filteredList.size();
     }
 
     public Filter getFilter() {
@@ -106,7 +93,7 @@ public class AdapterNews extends RecyclerView.Adapter<AdapterNews.viewHolider> i
                 } else {
                     filteredList = new ArrayList<>();
                     for (NewsArticle article : list) {
-                        if (article.getTitle().toLowerCase().contains(charString.toLowerCase())) {
+                        if (article.getTitle().toLowerCase().contains(charString.toLowerCase()) || article.getContent().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(article);
                         }
                     }

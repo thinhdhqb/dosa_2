@@ -1,6 +1,7 @@
 package com.example.dosa.ui.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.example.dosa.data.entity.WordList;
 import com.example.dosa.databinding.FragmentKhotuBinding;
+import com.example.dosa.ui.Activity.WordListDetailActivity;
 import com.example.dosa.ui.Adapter.AdapterWordList;
 import com.example.dosa.viewmodel.WordListViewModel;
 
@@ -38,6 +40,14 @@ public class FragmentWordList extends Fragment {
         binding.rcvWordList.setAdapter(adapterWordList);
         binding.rcvWordList.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        binding.layoutFavouriteWord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), WordListDetailActivity.class);
+                intent.putExtra("mode", "favWord");
+                startActivity(intent);
+            }
+        });
 
         return binding.getRoot();
     }

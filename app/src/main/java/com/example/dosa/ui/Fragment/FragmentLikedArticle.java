@@ -71,6 +71,13 @@ public class FragmentLikedArticle extends Fragment {
                 return false;
             }
         });
+
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendData.sendData("account", null);
+            }
+        });
         return binding.getRoot();
     }
 
@@ -117,8 +124,10 @@ public class FragmentLikedArticle extends Fragment {
                         String date = document.getString("date");
                         String imageURL = document.getString("imageURL");
                         String source = document.getString("source");
-                        NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, null, source);
-                        new DownloadImageTask(newsArticle).execute(imageURL);
+                        NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, imageURL, source);
+                        adapter.list.add(newsArticle);
+                        adapter.filteredList.add(newsArticle);
+                        adapter.notifyDataSetChanged();
                     }
                 });
     }
@@ -138,33 +147,4 @@ public class FragmentLikedArticle extends Fragment {
         super.onDetach();
         sendData = null;
     }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        NewsArticle newsArticle;
-
-        public DownloadImageTask(NewsArticle newsArticle) {
-            this.newsArticle = newsArticle;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            newsArticle.setImage(result);
-            articles.add(newsArticle);
-            adapter.notifyDataSetChanged();
-            Log.d("LIKEDASDAS", "onPostExecute: " + adapter.list.size());
-        }
-    }
-
-
 }

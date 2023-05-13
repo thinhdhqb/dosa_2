@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -42,6 +43,19 @@ public class FragmentNews extends Fragment {
         binding.rcvNews.setAdapter(adapterNews);
         binding.rcvNews.setLayoutManager(new LinearLayoutManager(getContext()));
         binding.rcvNews.setHasFixedSize(true);
+        binding.schvNews.setQueryHint("Tìm kiếm bài báo chứa từ vựng");
+        binding.schvNews.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                adapterNews.getFilter().filter(newText);
+                return false;
+            }
+        });
 
 
         return binding.getRoot();
@@ -72,39 +86,14 @@ public class FragmentNews extends Fragment {
                                 String date = document.getString("date");
                                 String imageURL = document.getString("imageURL");
                                 String source = document.getString("source");
-                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, null, source);
-                                new DownloadImageTask(newsArticle).execute(imageURL);
+                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, imageURL, source);
+                                adapterNews.list.add(newsArticle);
+                                adapterNews.filteredList.add(newsArticle);
+                                adapterNews.notifyDataSetChanged();
                             }
                         } else {
                         }
                     }
                 });
     }
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        NewsArticle newsArticle;
-
-        public DownloadImageTask(NewsArticle newsArticle) {
-            this.newsArticle = newsArticle;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            newsArticle.setImage(result);
-            articles.add(newsArticle);
-            adapterNews.notifyDataSetChanged();
-        }
-    }
-
 }

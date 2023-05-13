@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -33,7 +34,7 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
-        View listItem = layoutInflater.inflate(R.layout.item_tratu, parent, false);
+        View listItem = layoutInflater.inflate(R.layout.item_tratu_history, parent, false);
         MyViewHolder viewHolder = new MyViewHolder(listItem);
         return viewHolder;
     }
@@ -63,6 +64,12 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
             bundle.putString("word", wordDetail.getWord());
             sendData.sendData("tratu_decription", bundle);
         });
+        holder.imvDetail.setOnClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putString("word", wordDetail.getWord());
+            sendData.sendData("tratu_decription", bundle);
+        });
+
     }
 
     @Override
@@ -74,6 +81,8 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
         TextView txtWord, txtUSIPA, txtUKIPA, txtGeneralIPA, txtVie;
         RecyclerView rcvDictionarySection, rcvTranslation;
         LinearLayout layoutUSIPA, layoutUKIPA, layoutGeneralIPA;
+
+        ImageView imvDetail;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -89,6 +98,7 @@ public class AdapterTraTu extends RecyclerView.Adapter<AdapterTraTu.MyViewHolder
             layoutGeneralIPA = itemView.findViewById(R.id.layoutGeneralIPAHistory);
             rcvDictionarySection.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
             rcvTranslation.setLayoutManager(new LinearLayoutManager(itemView.getContext()));
+            imvDetail = itemView.findViewById(R.id.btnDetail);
         }
     }
 }

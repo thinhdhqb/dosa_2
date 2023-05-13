@@ -113,40 +113,15 @@ public class FragmentHome extends Fragment {
                                 String imageURL = document.getString("imageURL");
                                 String source = document.getString("source");
                                 Log.d("NewsArticle", "onComplete: " +document.getId() );
-                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, null, source);
-                                new DownloadImageTask(newsArticle).execute(imageURL);
+                                NewsArticle newsArticle = new NewsArticle(document.getId(), title, link, keywords, creator, description, content, date, imageURL, source);
+//                                new DownloadImageTask(newsArticle).execute(imageURL);
+                                adapterNews.list.add(newsArticle);
+                                adapterNews.filteredList.add(newsArticle);
+                                adapterNews.notifyDataSetChanged();
                             }
                         } else {
                         }
                     }
                 });
     }
-
-
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
-        NewsArticle newsArticle;
-
-        public DownloadImageTask(NewsArticle newsArticle) {
-            this.newsArticle = newsArticle;
-        }
-
-        protected Bitmap doInBackground(String... urls) {
-            String urldisplay = urls[0];
-            Bitmap mIcon11 = null;
-            try {
-                InputStream in = new java.net.URL(urldisplay).openStream();
-                mIcon11 = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return mIcon11;
-        }
-
-        protected void onPostExecute(Bitmap result) {
-            newsArticle.setImage(result);
-            articles.add(newsArticle);
-            adapterNews.notifyDataSetChanged();
-        }
-    }
-
 }

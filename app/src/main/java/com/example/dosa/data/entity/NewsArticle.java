@@ -15,14 +15,14 @@ public class NewsArticle {
     private String description;
     private String content;
     private String date;
-    private Bitmap image;
+    private String imageURL;
     private String source;
 
 
     public NewsArticle() {
     }
 
-    public NewsArticle(String id, String title, String link, ArrayList<String> keywords, ArrayList<String> creator, String description, String content, String date, Bitmap image, String source) {
+    public NewsArticle(String id, String title, String link, ArrayList<String> keywords, ArrayList<String> creator, String description, String content, String date, String imageURL, String source) {
         this.title = title;
         this.id = id;
         this.link = link;
@@ -31,7 +31,7 @@ public class NewsArticle {
         this.description = description;
         this.content = content;
         this.date = date;
-        this.image = image;
+        this.imageURL = imageURL;
         this.source = source;
     }
 
@@ -63,8 +63,8 @@ public class NewsArticle {
         return description;
     }
 
-    public Bitmap getImage() {
-        return image;
+    public String getImageURL() {
+        return imageURL;
     }
 
     public String getLink() {
@@ -95,8 +95,8 @@ public class NewsArticle {
         this.description = description;
     }
 
-    public void setImage(Bitmap image) {
-        this.image = image;
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
     }
 
     public void setKeywords(ArrayList<String> keywords) {

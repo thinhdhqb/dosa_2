@@ -50,6 +50,7 @@ public class AdapterWordList extends RecyclerView.Adapter<AdapterWordList.MyView
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, WordListDetailActivity.class);
+                intent.putExtra("mode", "other");
                 intent.putExtra("wordListID", list.get(holder.getAdapterPosition()) .id);
                 ((Activity)context).startActivity(intent);
             }

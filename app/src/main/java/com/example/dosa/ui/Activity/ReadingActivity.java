@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.dosa.data.entity.Definition;
 import com.example.dosa.data.entity.EngVieTranslation;
 import com.example.dosa.data.entity.IPA;
@@ -105,24 +106,14 @@ public class ReadingActivity extends AppCompatActivity {
         String source = intent.getStringExtra("source");
         String date = intent.getStringExtra("date");
         String content = intent.getStringExtra("content");
-
+        String imageURL = intent.getStringExtra("imageURL");
+        Glide.with(this).load(imageURL).fitCenter().into(binding.imvArticleImage);
 
 
         binding.txtTitleReading.setText(title);
         binding.txtTopicReading.setText(keyword);
         binding.txtSourceReading.setText(source + "  |  " + date);
 
-        // get image bitmap
-        Bitmap bmp = null;
-        String filename = getIntent().getStringExtra("image");
-        try {
-            FileInputStream is = this.openFileInput(filename);
-            bmp = BitmapFactory.decodeStream(is);
-            is.close();
-            binding.imvArticleImage.setImageBitmap(bmp);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //set word clickable
         binding.txtContentReading.setText(content);

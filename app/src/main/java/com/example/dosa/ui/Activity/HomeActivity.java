@@ -9,7 +9,9 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.dosa.R;
 import com.example.dosa.ui.Fragment.FragmentLikedArticle;
@@ -17,13 +19,11 @@ import com.example.dosa.ui.Fragment.FragmentLikedWord;
 import com.example.dosa.ui.Fragment.SendData;
 import com.example.dosa.ui.Fragment.FragmentAccount;
 import com.example.dosa.ui.Fragment.FragmentHome;
-import com.example.dosa.ui.Fragment.FragmentKhoTuDecriptionContinues;
 import com.example.dosa.ui.Fragment.FragmentSetting;
 import com.example.dosa.ui.Fragment.FragmentDictionaryDetail;
 import com.example.dosa.ui.Fragment.Fragment_Account_Detail;
 import com.example.dosa.ui.Fragment.FragmentDictionary;
 import com.example.dosa.ui.Fragment.FragmentNews;
-import com.example.dosa.ui.Fragment.FragmentkhoTuDecription;
 import com.example.dosa.ui.Fragment.FragmentWordList;
 import com.example.dosa.utils.Utils;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -39,10 +39,9 @@ public class HomeActivity extends AppCompatActivity implements SendData {
     public FragmentAccount fragmentAccount;
     public FragmentHome fragmentHome;
     public FragmentWordList fragmentWordList;
-    public FragmentkhoTuDecription fragmentkhoTuDecription;
-    public FragmentKhoTuDecriptionContinues fragmentKhoTuDecriptionContinues;
     public FragmentLikedWord fragmentLikedWord;
     public FragmentLikedArticle fragmentLikedArticle;
+    boolean singleBack = false;
 
 
     Fragment[] fragments;
@@ -63,12 +62,11 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         fragmentWordList = new FragmentWordList();
         fragmentAccount = new FragmentAccount();
         fragmentNews = new FragmentNews();
-        fragmentkhoTuDecription = new FragmentkhoTuDecription();
         fragmentDictionaryDetail = new FragmentDictionaryDetail();
         fragmentLikedArticle = new FragmentLikedArticle();
         fragmentLikedWord = new FragmentLikedWord();
         fragments = new Fragment[]{fragmentHome, fragmentDictionary, fragmentWordList, fragmentAccount,
-                 fragmentNews, fragmentkhoTuDecription, fragmentDictionaryDetail, fragmentLikedWord, fragmentLikedArticle};
+                 fragmentNews , fragmentDictionaryDetail, fragmentLikedWord, fragmentLikedArticle};
 
 
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -102,47 +100,6 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         }
     };
 
-//    @Override
-//    public void sendData(String a) {
-//        if (a.equals("account_detail")) {
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new Fragment_Account_Detail(), null);
-//            fragmentTransaction.commit();
-//        }else if(a.equals("account")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new FragmentAccount(), null);
-//            fragmentTransaction.commit();
-//        }else if (a.equals("setting")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new FragmentSetting(), null);
-//            fragmentTransaction.commit();
-//        }else if(a.equals("news")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new Fragment_TuDien(), null);
-//            fragmentTransaction.commit();
-//        }else if (a.equals("tratu_decription")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            FragmentTraTuDecription fragment = new FragmentTraTuDecription();
-//            fragmentTransaction.replace(R.id.frameLayout,fragment, null);
-//            fragmentTransaction.commit();
-//        }else if(a.equals("khotu_decription")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new FragmentkhoTuDecription(), null);
-//            fragmentTransaction.commit();
-//        }else if (a.equals("khotu_continues")){
-//            FragmentManager fragmentManager = getSupportFragmentManager();
-//            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.replace(R.id.frameLayout, new FragmentKhoTuDecriptionContinues(), null);
-//            fragmentTransaction.commit();
-//        }
-//    }
-
     @Override
     public void sendData(String a, Bundle data) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -161,16 +118,12 @@ public class HomeActivity extends AppCompatActivity implements SendData {
         }else if (a.equals("tratu_decription")){
             fragmentDictionaryDetail.updateUI(data.getString("word"));
             showFragment(fragmentDictionaryDetail);
-        }else if(a.equals("khotu_decription")){
-            fragmentTransaction.replace(R.id.frameLayout, fragmentkhoTuDecription, null);
-            fragmentTransaction.commit();
-        }else if (a.equals("khotu_continues")){
-            fragmentTransaction.replace(R.id.frameLayout, fragmentKhoTuDecriptionContinues, null);
-            fragmentTransaction.commit();
+        }else if (a.equals("account")){
+            showFragment(fragmentAccount);
         }
     }
 
-    private void showFragment(Fragment targetFragment) {
+    public void showFragment(Fragment targetFragment) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         for (Fragment fragment : fragments) {
             if (!fragment.isHidden())
@@ -204,9 +157,24 @@ public class HomeActivity extends AppCompatActivity implements SendData {
             showFragment(fragmentHome);
             return;
         }
-        Intent a = new Intent(Intent.ACTION_MAIN);
-        a.addCategory(Intent.CATEGORY_HOME);
-        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(a);
+
+        if (singleBack) {
+            Intent a = new Intent(Intent.ACTION_MAIN);
+            a.addCategory(Intent.CATEGORY_HOME);
+            a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(a);
+            return;
+        }
+        this.singleBack = true;
+        Toast.makeText(this, "Nhấn nút trở về lần nữa để thoát", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                singleBack=false;
+            }
+        }, 2000);
+
     }
+
 }

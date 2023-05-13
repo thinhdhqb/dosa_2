@@ -177,10 +177,13 @@ public class LoginActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             // Sign in success, update UI with the signed-in user's information
                                             Log.d("signInWithCredential", "signInWithCredential:success");
+                                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
+
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             updateUI(user);
                                         } else {
                                             // If sign in fails, display a message to the user.
+
                                             Log.w("signInWithCredential", "signInWithCredential:failure", task.getException());
                                             updateUI(null);
                                         }
@@ -206,12 +209,14 @@ public class LoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("handleFacebookAccessToken", "signInWithCredential:success");
+
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
 
-                            updateUI(null);
+                            Toast.makeText(LoginActivity.this, "Đăng nhập thất bại!", Toast.LENGTH_SHORT).show();
                         }
 
                         // ...

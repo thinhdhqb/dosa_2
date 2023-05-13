@@ -1,5 +1,6 @@
 package com.example.dosa.ui.Activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.Observer;
@@ -17,6 +18,12 @@ import com.example.dosa.databinding.FragmentTudienBinding;
 import com.example.dosa.ui.Adapter.AdapterWordInWordList;
 import com.example.dosa.viewmodel.DictionaryViewModel;
 import com.example.dosa.viewmodel.WordListViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.List;
 
@@ -24,7 +31,6 @@ public class WordListDetailActivity extends AppCompatActivity {
     ActivityWordListDetailBinding binding;
     AdapterWordInWordList adapter;
     WordListViewModel wordListViewModel;
-    int wordListID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +40,8 @@ public class WordListDetailActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         Intent intent = getIntent();
-        wordListID = intent.getIntExtra("wordListID", 1);
+        String mode = intent.getStringExtra("mode");
+
         wordListViewModel = new ViewModelProvider(this).get(WordListViewModel.class);
 
 
@@ -43,7 +50,13 @@ public class WordListDetailActivity extends AppCompatActivity {
         adapter = new AdapterWordInWordList();
         binding.rcvWord.setAdapter(adapter);
         binding.rcvWord.setLayoutManager(new LinearLayoutManager(this));
-        fetchData();
+        if (mode.equals("favWord")) {
+            fetchLikedWords();
+        }
+        else {
+            int wordListID = intent.getIntExtra("wordListID", 1);
+            fetchData(wordListID);
+        }
 
         binding.schvWordList.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -62,8 +75,6 @@ public class WordListDetailActivity extends AppCompatActivity {
         binding.btnPractice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
                 Intent intent = new Intent(WordListDetailActivity.this, FlashcardActivity.class);
                 intent.putStringArrayListExtra("wordList", adapter.list);
                 startActivity(intent);
@@ -87,7 +98,7 @@ public class WordListDetailActivity extends AppCompatActivity {
 
     }
 
-    private void fetchData() {
+    private void fetchData(int wordListID) {
         wordListViewModel.getWordsByWordListID(wordListID).observe(WordListDetailActivity.this, new Observer<List<String>>() {
             @Override
             public void onChanged(List<String> strings) {
@@ -98,5 +109,30 @@ public class WordListDetailActivity extends AppCompatActivity {
                 binding.btnPractice.setClickable(true);
             }
         });
+    }
+
+    private void fetchLikedWords() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userID = FirebaseAuth.getInstance().getUid();
+        adapter.list.clear();
+        db.collection("FavouriteWord")
+                .whereEqualTo("userID", userID)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String word = document.getString("word");
+                                adapter.list.add(word);
+                                adapter.filteredList.add(word);
+                                adapter.notifyDataSetChanged();
+                            }
+                            binding.btnPractice.setEnabled(true);
+                            binding.btnPractice.setClickable(true);
+                        } else {
+                        }
+                    }
+                });
     }
 }

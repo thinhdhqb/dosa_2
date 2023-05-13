@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.example.dosa.data.entity.NewsArticle;
 import com.example.dosa.databinding.FragmentLikedWordsBinding;
 import com.example.dosa.databinding.FragmentTudienBinding;
+import com.example.dosa.ui.Activity.HomeActivity;
 import com.example.dosa.ui.Adapter.AdapterLikedWord;
 import com.example.dosa.ui.Adapter.AdapterNews;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -63,6 +64,12 @@ public class FragmentLikedWord extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 adapter.getFilter().filter(newText);
                 return false;
+            }
+        });
+        binding.imgBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendData.sendData("account", null);
             }
         });
         return binding.getRoot();
